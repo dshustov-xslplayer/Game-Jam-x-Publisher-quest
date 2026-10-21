@@ -129,17 +129,17 @@ html{scroll-behavior:smooth}
       <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
         <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="32" height="22" rx="3"/><path d="M18 40h12M24 32v8"/></svg>
         <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Prepare</h3>
-        <p style="margin:0;color:#C8C8D0">{{ prepareCard }}</p>
+        <div style="display:flex;flex-direction:column;gap:8px;color:#C8C8D0"><span style="display:block"><b style="color:{{ macLabel }}">macOS:</b> Use a Mac with macOS 12.4 or newer, add the game in Publisher Account, get the macOS Build Loader (Mac/build_loader) and copy the game’s API key.</span><span style="display:block"><b style="color:{{ winLabel }}">Windows:</b> Use a Windows 10 (64-bit) PC, add the game in Publisher Account, get the Windows Build Loader (Win\build_loader.exe) and copy the game’s API key. Keep the game path in Latin letters.</span></div>
       </div>
       <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
         <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 35a7 7 0 0 1-.8-13.9A10 10 0 0 1 31.500 19 7 7 0 0 1 33 35"/><path d="M24 42V27M18 32l6-6 6 6"/></svg>
         <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Upload</h3>
-        <p style="margin:0;color:#C8C8D0">Double-click the Xsolla Upload app, drag in your game and type the name and key. It does a dry run, then sends the build to Draft.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;color:#C8C8D0"><span style="display:block"><b style="color:{{ macLabel }}">macOS:</b> Double-click Xsolla Upload.command, drag in your .app, type the name and key. It checks the build, then sends it to Draft.</span><span style="display:block"><b style="color:{{ winLabel }}">Windows:</b> Double-click Xsolla Upload.bat, drag in your game folder, type the name and key. It checks the build, then sends it to Draft.</span></div>
       </div>
       <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
         <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 7l15 5v10c0 9-6.300 15-15 19-8.700-4-15-10-15-19V12z"/><path d="M17 24.500l5 5 9-10"/></svg>
         <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Verify</h3>
-        <p style="margin:0;color:#C8C8D0">Paste the receipt for an automatic check, then find the build row in Publisher Account and set its start file.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;color:#C8C8D0"><span style="display:block"><b style="color:{{ macLabel }}">macOS:</b> Paste the receipt for an automatic check, find the build row in Publisher Account and set the .app start file. One standalone installer follows.</span><span style="display:block"><b style="color:{{ winLabel }}">Windows:</b> Paste the receipt for an automatic check, find the build row in Publisher Account and set the .exe start file. Web and standalone installers follow.</span></div>
       </div>
     </div>
   </section>
@@ -923,6 +923,7 @@ class Component extends DCLogic {
       register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
       demoText: dtext + (dtyping ? '\u258C' : ''), demoChecks: demoChecks, demoPill: demoOk ? 'Verified' : 'Printing...', demoPillBg: demoOk ? '#80EAFF' : '#F5A623',
       hasTicket: total === 12, ticketGame: (this.state.gameName || 'Your jam game'), ticketNo: tnum, ticketDate: tdate,
+      macLabel: M ? '#80EAFF' : '#9A9AA8', winLabel: !M ? '#80EAFF' : '#9A9AA8',
       prepareCard: M ? 'Use a Mac with macOS 12.4 or newer, add the game in Publisher Account, get the macOS Build Loader and copy the game’s API key.' : 'Use a Windows 10 (64-bit) PC, add the game in Publisher Account, get the Windows Build Loader and copy the game’s API key.',
       hasSkipAll: !(v && v.all),
       skipAllNote: 'Receipt will not turn green? Maybe you uploaded another way or the app could not read the key. You can close the three receipt steps by hand and move on.',
