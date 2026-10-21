@@ -1,0 +1,287 @@
+/* ============================================================
+   XSOLLA DESIGN SYSTEM — Colors & Typography
+   ============================================================
+   Brand colors sourced from Xsolla brand identity (design.xsolla.com)
+   and Brandfetch. Primary cyan is #80EAFF "Anakiwa".
+   ============================================================ */
+
+/* ---------- Fonts ----------------------------------------- */
+/* Xsolla brand fonts: Pilat Wide (display) and Aktiv Grotesk (body). */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@font-face { font-family: 'Pilat Wide'; src: url('assets/fonts/pilat-wide/pilat-wide-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pilat Wide'; src: url('assets/fonts/pilat-wide/pilat-wide-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pilat Wide'; src: url('assets/fonts/pilat-wide/pilat-wide-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aktiv Grotesk'; src: url('assets/fonts/aktiv-grotesk/aktiv-grotesk-latin-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aktiv Grotesk'; src: url('assets/fonts/aktiv-grotesk/aktiv-grotesk-latin-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aktiv Grotesk'; src: url('assets/fonts/aktiv-grotesk/aktiv-grotesk-latin-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+
+:root {
+  /* ============ BRAND PRIMARY ============ */
+  --xs-cyan:        #80EAFF;   /* Anakiwa — primary brand cyan  */
+  --xs-cyan-100:    #E5FAFF;
+  --xs-cyan-200:    #CCF6FF;
+  --xs-cyan-300:    #99EEFF;
+  --xs-cyan-400:    #80EAFF;   /* base */
+  --xs-cyan-500:    #4ED6F0;
+  --xs-cyan-600:    #1FB8D8;
+  --xs-cyan-700:    #1090AB;
+
+  /* ============ BRAND SECONDARY ============ */
+  --xs-magenta:     #FF005C;   /* Magenta logo / accents */
+  --xs-magenta-100: #FFE5EE;
+  --xs-magenta-400: #FF3D85;
+  --xs-magenta-500: #FF005C;
+  --xs-magenta-700: #B30040;
+
+  --xs-purple:      #9580FF;   /* C9 — Accent purple */
+  --xs-purple-100:  #EDEAFF;
+  --xs-purple-500:  #9580FF;
+  --xs-purple-700:  #6A50E0;
+
+  /* ============ NEUTRALS ============ */
+  --xs-black:       #0A0A0F;   /* near-black, slight blue tint  */
+  --xs-ink:         #15151D;
+  --xs-graphite:    #2A2A35;
+  --xs-slate:       #4A4A57;
+  --xs-steel:       #6E6E7E;
+  --xs-fog:         #9A9AA8;
+  --xs-mist:        #C8C8D0;
+  --xs-cloud:       #E6E6EC;
+  --xs-snow:        #F4F4F7;
+  --xs-white:       #FFFFFF;
+
+  /* ============ SEMANTIC — LIGHT THEME ============ */
+  --bg:             #FFFFFF;
+  --bg-elev-1:      #F4F4F7;
+  --bg-elev-2:      #FFFFFF;
+  --bg-inverse:     #0A0A0F;
+  --bg-tinted:      #E5FAFF;     /* cyan wash */
+
+  --fg-1:           #0A0A0F;     /* primary text */
+  --fg-2:           #4A4A57;     /* secondary text */
+  --fg-3:           #6E6E7E;     /* tertiary / placeholder */
+  --fg-disabled:    #C8C8D0;
+  --fg-on-cyan:     #0A0A0F;     /* text on cyan brand bg */
+  --fg-on-dark:     #FFFFFF;
+
+  --border:         #E6E6EC;
+  --border-strong:  #C8C8D0;
+  --border-focus:   #1FB8D8;
+
+  --accent:         #80EAFF;
+  --accent-hover:   #4ED6F0;
+  --accent-press:   #1FB8D8;
+
+  --success:        #2ECC71;
+  --warning:        #F5A623;
+  --danger:         #FF005C;
+  --info:           #4ED6F0;
+
+  /* ============ TYPOGRAPHY ============ */
+  --font-display:   'Pilat Wide', system-ui, sans-serif;
+  --font-body:      'Aktiv Grotesk', system-ui, sans-serif;
+  --font-mono:      'JetBrains Mono', ui-monospace, monospace;
+
+  /* Type scale (rem, base 16px) */
+  --fs-xs:    0.75rem;     /* 12 */
+  --fs-sm:    0.875rem;    /* 14 */
+  --fs-base:  1rem;        /* 16 */
+  --fs-md:    1.125rem;    /* 18 */
+  --fs-lg:    1.25rem;     /* 20 */
+  --fs-xl:    1.5rem;      /* 24 */
+  --fs-2xl:   2rem;        /* 32 */
+  --fs-3xl:   2.5rem;      /* 40 */
+  --fs-4xl:   3.5rem;      /* 56 */
+  --fs-5xl:   4.5rem;      /* 72 */
+  --fs-6xl:   6rem;        /* 96 */
+
+  --lh-tight:   1.05; /* @kind other */
+  --lh-snug:    1.2; /* @kind other */
+  --lh-normal:  1.45; /* @kind other */
+  --lh-loose:   1.6; /* @kind other */
+
+  --ls-tight:   -0.03em;
+  --ls-snug:    -0.015em;
+  --ls-normal:  0; /* @kind other */
+  --ls-wide:    0.04em;
+  --ls-caps:    0.08em;
+
+  /* ============ SPACING ============ */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+  --sp-32: 128px;
+
+  /* ============ RADIUS ============ */
+  --r-none:  0; /* @kind radius */
+  --r-xs:    4px;
+  --r-sm:    8px;
+  --r-md:    12px;
+  --r-lg:    16px;
+  --r-xl:    24px;
+  --r-2xl:   32px;
+  --r-pill:  999px;
+
+  /* ============ ELEVATION / SHADOWS ============ */
+  --shadow-1:  0 1px 2px rgba(10, 10, 15, 0.06), 0 1px 1px rgba(10, 10, 15, 0.04);
+  --shadow-2:  0 4px 12px rgba(10, 10, 15, 0.08), 0 2px 4px rgba(10, 10, 15, 0.04);
+  --shadow-3:  0 12px 32px rgba(10, 10, 15, 0.10), 0 4px 8px rgba(10, 10, 15, 0.06);
+  --shadow-4:  0 24px 56px rgba(10, 10, 15, 0.14), 0 8px 16px rgba(10, 10, 15, 0.08);
+  --shadow-glow-cyan:  0 0 0 4px rgba(128, 234, 255, 0.35);
+  --shadow-focus:      0 0 0 3px rgba(31, 184, 216, 0.45);
+
+  /* ============ MOTION ============ */
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+  --ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in:       cubic-bezier(0.4, 0, 1, 1); /* @kind other */
+
+  --dur-fast:   120ms; /* @kind other */
+  --dur-base:   200ms; /* @kind other */
+  --dur-slow:   320ms; /* @kind other */
+  --dur-slower: 520ms; /* @kind other */
+}
+
+/* ============ DARK THEME ============ */
+[data-theme="dark"], .xs-dark {
+  --bg:             #0A0A0F;
+  --bg-elev-1:      #15151D;
+  --bg-elev-2:      #1F1F2A;
+  --bg-inverse:     #FFFFFF;
+  --bg-tinted:      #0E2530;
+
+  --fg-1:           #FFFFFF;
+  --fg-2:           #C8C8D0;
+  --fg-3:           #9A9AA8;
+  --fg-disabled:    #4A4A57;
+  --fg-on-dark:     #FFFFFF;
+
+  --border:         #2A2A35;
+  --border-strong:  #4A4A57;
+  --border-focus:   #80EAFF;
+
+  --accent-hover:   #99EEFF;
+  --accent-press:   #80EAFF;
+
+  --shadow-1:  0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
+  --shadow-2:  0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-3:  0 12px 32px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.35);
+  --shadow-4:  0 24px 56px rgba(0, 0, 0, 0.6),  0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   SEMANTIC TYPOGRAPHY
+   ============================================================ */
+
+.xs-display, h1.xs-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg-1);
+}
+
+.xs-h1, h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-4xl);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg-1);
+}
+
+.xs-h2, h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-3xl);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--fg-1);
+}
+
+.xs-h3, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--fg-1);
+}
+
+.xs-h4, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-xl);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+
+.xs-h5, h5 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+
+.xs-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  line-height: 1;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.xs-body, p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+}
+
+.xs-body-lg {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+}
+
+.xs-body-sm, small {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+}
+
+.xs-caption {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--fg-3);
+}
+
+.xs-code, code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  font-weight: 500;
+  background: var(--bg-elev-1);
+  padding: 0.15em 0.4em;
+  border-radius: var(--r-xs);
+  color: var(--fg-1);
+}

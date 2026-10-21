@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game Jam x Xsolla Publisher: Launch Quest</title>
+<meta name="description" content="Register in Publisher Account, upload your jam build to the Xsolla Launcher and verify it with a receipt.">
+<link rel="stylesheet" href="ds/xsolla/colors_and_type.css">
+<style>
+body{margin:0;background:#0A0A0F}
+a{color:#80EAFF}
+.xq-btn{transition:filter .2s,background .2s}
+.xq-btn:hover{filter:brightness(.92)}
+.xq-btn:focus-visible,.xq-chk:focus-visible,a:focus-visible{outline:2px solid #80EAFF;outline-offset:3px}
+.xq-chk{cursor:pointer}
+@keyframes xq-pop{0%{transform:scale(.6)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+@keyframes xq-glow{0%{box-shadow:0 0 0 0 rgba(128,234,255,.7)}100%{box-shadow:0 0 0 22px rgba(128,234,255,0)}}
+@keyframes xq-toast{0%{opacity:0;transform:translate(-50%,-14px)}10%,88%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-8px)}}
+@keyframes xq-burst{0%{opacity:1;transform:translate(0,0) rotate(0)}70%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy2)) rotate(var(--rot))}}
+@keyframes xq-rise{0%{opacity:0;transform:translateY(8px)}20%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
+@keyframes xq-row{0%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:none}}
+.xq-pop{animation:xq-pop .5s cubic-bezier(.2,.9,.3,1.4)}
+.xq-glow{animation:xq-glow .9s ease-out}
+.xq-row{animation:xq-row .35s ease-out both}
+.xq-bar{transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.xq-p{position:fixed;left:50%;top:32%;border-radius:2px;pointer-events:none;animation:xq-burst 1.8s cubic-bezier(.15,.7,.3,1) forwards}
+@media (prefers-reduced-motion:reduce){.xq-pop,.xq-glow,.xq-row{animation:none}.xq-p{display:none}.xq-bar{transition:none}}
+pre{margin:0}
+@media (max-width:720px){.xq-nav-links{display:none!important}}
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div class="xs-dark" style="background:#0A0A0F;color:#FFFFFF;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.5;min-height:100%">
+
+  <!-- FX LAYER -->
+  <div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden">
+    <sc-for list="{{ particles }}" as="pt" hint-placeholder-count="0">
+      <span class="xq-p" style="width:{{ pt.w }}px;height:{{ pt.h }}px;background:{{ pt.color }};--dx:{{ pt.dx }}px;--dy2:{{ pt.dy2 }}px;--rot:{{ pt.rot }}deg;animation-delay:{{ pt.delay }}ms"></span>
+    </sc-for>
+  </div>
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" style="position:fixed;left:50%;top:24px;z-index:60;max-width:min(560px,calc(100vw - 32px));background:#15151D;border:1px solid #80EAFF;border-radius:16px;padding:14px 20px;box-shadow:0 18px 48px rgba(0,0,0,.55),0 0 0 4px rgba(128,234,255,.12);font-weight:600;font-size:15px;color:#FFFFFF;animation:xq-toast 5s ease-in-out forwards">{{ toast }}</div>
+  </sc-if>
+
+  <!-- NAV -->
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1200px;margin:0 auto;padding:20px 32px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:16px">
+      <svg viewBox="0 0 430.5 91.2" role="img" aria-label="Xsolla" fill="#FFFFFF" style="height:22px;width:auto"><path d="M77.9,25.4c-6.4-1.6-8.4-3.3-10.2-8.9C64.3,5.7,57.4,0,47.7,0s-16.6,5.7-20,16.5c-1.8,5.6-3.8,7.3-10.2,8.9C6.6,28.1-.1,35.6-.1,45.6s6.7,17.5,17.6,20.2c6.4,1.6,8.4,3.3,10.2,8.9,3.4,10.8,10.3,16.5,20,16.5s16.6-5.7,20-16.5c1.8-5.6,3.8-7.3,10.2-8.9,10.9-2.7,17.6-10.2,17.6-20.2s-6.7-17.5-17.6-20.2ZM63.4,61c-6.6,0-12.4-4.8-13.8-10.7h-3.6c-1.5,5.8-7.3,10.7-13.9,10.7s-14.3-6.5-14.3-14.4,6.4-14.3,14.3-14.3,12.4,4.8,13.9,10.6h3.6c1.5-5.9,7.3-10.6,13.8-10.6s14.4,6.4,14.4,14.3-6.5,14.4-14.4,14.4Z"/><rect x="57.7" y="40.9" width="11.5" height="11.5"/><rect x="26.4" y="40.9" width="11.5" height="11.5"/><polygon points="163 10.6 145.7 10.6 129.3 33 112.7 10.6 94.7 10.6 120.4 45 93.5 80.6 110.8 80.6 128.8 56.2 146.9 80.6 165 80.6 137.7 44.2 163 10.6"/><path d="M178.8,30.7l16.9-20.1h-17.4l-9,10.6c-2.9,3.5-4.3,7-4.3,10.8s1.4,7.2,4.3,10.8l13.7,17.2-16.1,20.6h17.8l7.9-10c3-3.8,4.4-7.4,4.4-11.3s-1.4-7.5-4.4-11.3l-13.8-17.3Z"/><path d="M239.6,9c-20.5,0-36.6,16.1-36.6,36.6s16.1,36.6,36.6,36.6,36.6-16.1,36.6-36.6-16.1-36.6-36.6-36.6ZM239.6,68.2c-12.3,0-21.6-9.7-21.6-22.6s9.3-22.6,21.6-22.6,21.6,9.7,21.6,22.6-9.3,22.6-21.6,22.6Z"/><polygon points="273.1 10.6 310.7 80.6 328.3 80.6 290.7 10.6 273.1 10.6"/><path d="M394.3,10.6h-10.5l-28.6,55.2-29.7-55.2h-17.6l37.6,70h85.1l-36.3-70ZM369.8,67.6l18.9-37.6,18.9,37.6h-37.7Z"/></svg>
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Game Jam</span>
+    </div>
+    <nav class="xq-nav-links" style="display:flex;align-items:center;gap:28px;font-weight:500;font-size:15px">
+      <a href="#how" style="color:#C8C8D0;text-decoration:none">How it works</a>
+      <a href="#quest" style="color:#C8C8D0;text-decoration:none">Checklist</a>
+      <a href="#notes" style="color:#C8C8D0;text-decoration:none">Good to know</a>
+    </nav>
+    <a class="xq-btn" href="#quest" style="background:#80EAFF;color:#0A0A0F;text-decoration:none;font-weight:600;font-size:14px;padding:12px 22px;border-radius:999px">Start the checklist</a>
+  </header>
+
+  <!-- HERO -->
+  <section style="max-width:1200px;margin:0 auto;padding:56px 32px 72px;display:flex;flex-wrap:wrap;gap:56px;align-items:center">
+    <div style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">Game Jam × Xsolla Publisher</span>
+      <h1 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(36px,5.4vw,68px);line-height:1.04;letter-spacing:-0.03em;color:#FFFFFF;text-wrap:balance">Get your jam build into the Xsolla Launcher</h1>
+      <p style="margin:0;font-size:19px;line-height:1.5;color:#C8C8D0;max-width:520px">Twelve steps take your game from a zip archive to a Draft build that testers can install. Three of them are checked for real: a double-click upload app prints a receipt and this page verifies it.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="xq-btn" href="#quest" style="background:#80EAFF;color:#0A0A0F;text-decoration:none;font-weight:600;font-size:16px;padding:16px 28px;border-radius:999px">Start the checklist</a>
+        <a class="xq-btn" href="#how" style="background:transparent;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:16px;padding:14.5px 26px;border-radius:999px;border:1.5px solid #4A4A57">See how it works</a>
+      </div>
+    </div>
+    <div style="flex:1 1 420px;min-width:0;background:#15151D;border:1px solid #2A2A35;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 24px 56px rgba(0,0,0,.6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Example receipt</span>
+        <span style="font-size:12px;font-weight:600;color:#0A0A0F;background:#80EAFF;border-radius:999px;padding:4px 12px">Draft</span>
+      </div>
+      <div style="overflow-x:auto;background:#0A0A0F;border:1px solid #2A2A35;border-radius:12px;padding:16px">
+        <pre style="font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:13px;line-height:1.7;color:#C8C8D0">XSOLLA-QUEST-RECEIPT v1
+builder_version=1.23.0
+builder_signer=Xsolla (USA), Inc (2FWGTXK3RK)
+builder_signature_valid=yes
+key_mask=AB12...xyz
+init_result=success
+game_name=My Jam Game
+update_result=success
+<span style="color:#80EAFF;font-weight:600">build_in_list=yes</span></pre>
+      </div>
+      <p style="margin:0;font-size:14px;color:#9A9AA8">The upload app sends your game to the Draft stage and prints this receipt. Paste it into the page below. Players never see a Draft build.</p>
+    </div>
+  </section>
+
+  <!-- FACTS -->
+  <section style="max-width:1200px;margin:0 auto;padding:0 32px 72px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:6px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:40px;letter-spacing:-0.03em;color:#80EAFF">9</span><span style="color:#C8C8D0">checklist steps</span></div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:6px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:40px;letter-spacing:-0.03em;color:#80EAFF">2</span><span style="color:#C8C8D0">platforms: macOS and Windows</span></div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:6px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:40px;letter-spacing:-0.03em;color:#80EAFF">1</span><span style="color:#C8C8D0">API key per game</span></div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:6px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:40px;letter-spacing:-0.03em;color:#80EAFF">0</span><span style="color:#C8C8D0">players affected: builds stay in Draft</span></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="max-width:1200px;margin:0 auto;padding:24px 32px 80px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">How it works</span>
+      <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);line-height:1.15;letter-spacing:-0.015em;text-wrap:balance">Four stages, one script</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="17" r="7"/><path d="M10 40c1-8 7-12 14-12s13 4 14 12"/></svg>
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Register</h3>
+        <p style="margin:0;color:#C8C8D0">Sign up in Publisher Account and create your first project. It takes a few minutes and a confirmation code from your email.</p>
+      </div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="32" height="22" rx="3"/><path d="M18 40h12M24 32v8"/></svg>
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Prepare</h3>
+        <p style="margin:0;color:#C8C8D0">Use a Mac for a macOS build, add the game in Publisher Account and grab Build Loader with the game's API key.</p>
+      </div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 35a7 7 0 0 1-.8-13.9A10 10 0 0 1 31.500 19 7 7 0 0 1 33 35"/><path d="M24 42V27M18 32l6-6 6 6"/></svg>
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Upload</h3>
+        <p style="margin:0;color:#C8C8D0">Double-click the Xsolla Upload app, drag in your game and type the name and key. It does a dry run, then sends the build to Draft.</p>
+      </div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 7l15 5v10c0 9-6.300 15-15 19-8.700-4-15-10-15-19V12z"/><path d="M17 24.500l5 5 9-10"/></svg>
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Verify</h3>
+        <p style="margin:0;color:#C8C8D0">Paste the receipt for an automatic check, then find the build row in Publisher Account and set its start file.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="quest" style="background:#15151D;border-top:1px solid #2A2A35;border-bottom:1px solid #2A2A35">
+    <div style="max-width:1200px;margin:0 auto;padding:80px 32px;display:flex;flex-direction:column;gap:40px">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">The checklist</span>
+        <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);line-height:1.15;letter-spacing:-0.015em;text-wrap:balance">Tick each step as you finish it</h2>
+        <p style="margin:0;color:#C8C8D0">Your progress stays in this browser. Finish a stage to unlock its item.</p>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+        <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:32px">
+
+          <!-- Stage 0 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 0: Register in Publisher Account</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ registerCount }} of 3</span>
+            </div>
+            <sc-for list="{{ register }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                </div>
+              </div>
+            </sc-for>
+                      <p style="margin:0;font-size:13px;color:#9A9AA8">Summary of <a href="https://developers.xsolla.com/ru/get-started/work-in-pa/create-first-project/" target="_blank" rel="noopener" style="color:#80EAFF">Create first project</a> in the Xsolla docs. Already have an account and a project? Tick the three steps and move on.</p>
+          </div>
+
+          <!-- Stage 1 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 1: Prepare</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ prepareCount }} of 3</span>
+            </div>
+            <sc-for list="{{ prepare }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Stage 2 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 2: Upload with the app</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ uploadCount }} of 3</span>
+              <span style="margin-left:auto;font-size:13px;color:#9A9AA8">Mac and Windows</span>
+            </div>
+            <sc-for list="{{ upload }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                  <sc-if value="{{ it.isDl }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                      <a class="xq-btn" href="https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip" target="_blank" rel="noopener" onClick="{{ it.download }}" style="background:#80EAFF;color:#0A0A0F;text-decoration:none;display:inline-block;border-radius:999px;padding:12px 22px;font:600 14px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">Download xsolla-upload.zip</a>
+                      <span style="font-size:13px;color:#C8C8D0">{{ it.dlMsg }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="background:#0A0A0F;border:1px solid #2A2A35;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px">Verification</span>
+              <label style="display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Your game name (type the same name in the app)</span>
+                <input id="game-name" type="text" value="{{ gameName }}" onChange="{{ onGame }}" placeholder="My Jam Game" style="box-sizing:border-box;width:100%;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#FFFFFF;font:400 15px 'Aktiv Grotesk',system-ui,sans-serif">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Receipt from the upload app</span>
+                <textarea id="receipt" rows="9" value="{{ receiptText }}" onChange="{{ onReceipt }}" placeholder="XSOLLA-QUEST-RECEIPT v1&#10;run_id=..." style="box-sizing:border-box;width:100%;min-height:150px;resize:vertical;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#C8C8D0;font:400 12.5px/1.6 'JetBrains Mono',ui-monospace,Menlo,monospace"></textarea>
+              </label>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ checks }}" as="ck" hint-placeholder-count="7">
+                  <div class="{{ ck.cls }}" style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #2A2A35;animation-delay:{{ ck.delay }}ms">
+                    <span style="flex:none;min-width:104px;text-align:center;font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid {{ ck.color }};color:{{ ck.color }}">{{ ck.pill }}</span>
+                    <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-weight:600;font-size:15px">{{ ck.label }}</span>
+                      <span style="font-size:13px;color:#9A9AA8;word-break:break-word">{{ ck.detail }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ receiptOk }}" hint-placeholder-val="{{ false }}">
+                <div class="xq-pop" style="display:flex;gap:14px;align-items:flex-start;background:rgba(128,234,255,.08);border:1px solid #80EAFF;border-radius:16px;padding:16px 18px">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#80EAFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px;color:#80EAFF">Receipt accepted</span><span style="font-size:14px;color:#C8C8D0;word-break:break-word">{{ receiptSummary }}</span></div>
+                </div>
+              </sc-if>
+              <p style="margin:0;font-size:13px;color:#9A9AA8">The page checks what the app reports about your upload. A receipt could still be edited by hand, so organizers can confirm winners in Publisher Account, Builds, Game builds.</p>
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 3: Verify in Publisher Account</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ verifyCount }} of 3</span>
+            </div>
+            <sc-for list="{{ verify }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Progress + items -->
+        <aside style="flex:1 1 300px;min-width:0;background:#0A0A0F;border:1px solid #2A2A35;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Progress</span>
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:20px;color:#80EAFF">{{ doneCount }} / 12</span>
+            </div>
+            <div style="height:10px;background:#15151D;border:1px solid #2A2A35;border-radius:999px;overflow:hidden"><div class="xq-bar" style="height:100%;background:#80EAFF;border-radius:999px;width:{{ pct }}%"></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative">
+              <span style="font-size:14px;color:#C8C8D0">{{ statusLine }}</span>
+              <sc-if value="{{ hasXpPop }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:0;top:-6px;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:16px;color:#D9FF66;animation:xq-rise 1.5s ease-out forwards">{{ xpPop }}</span></sc-if>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;background:#15151D;border:1px solid #2A2A35;border-radius:12px;padding:10px 14px">
+              <div style="display:flex;flex-direction:column"><span style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Rank</span><span style="font-weight:600;font-size:15px">{{ rankName }}</span></div>
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:16px;color:#80EAFF">{{ xp }} / {{ xpMax }} XP</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Your items</span>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+
+              <div class="{{ slotRClass }}" style="border:1px solid {{ slotRBorder }};background:#15151D;border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                <sc-if value="{{ doneR }}" hint-placeholder-val="{{ false }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500" fill="#80EAFF" fill-opacity=".12"/><circle cx="24" cy="19" r="4.500"/><path d="M15 34c1-5 4.500-7.500 9-7.500s8 2.500 9 7.500"/></svg>
+                </sc-if>
+                <sc-if value="{{ notDoneR }}" hint-placeholder-val="{{ true }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#4A4A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500"/><rect x="16" y="23" width="16" height="12" rx="2"/><path d="M19.500 23v-3.500a4.500 4.500 0 0 1 9 0V23"/></svg>
+                </sc-if>
+                <span style="font-size:12px;line-height:1.25;color:#C8C8D0">Publisher Account</span>
+              </div>
+
+              <div class="{{ slotAClass }}" style="border:1px solid {{ slotABorder }};background:#15151D;border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                <sc-if value="{{ doneA }}" hint-placeholder-val="{{ false }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500" fill="#80EAFF" fill-opacity=".12"/><circle cx="19" cy="24" r="4.500"/><path d="M23.500 24H34M30 24v4M34 24v3"/></svg>
+                </sc-if>
+                <sc-if value="{{ notDoneA }}" hint-placeholder-val="{{ true }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#4A4A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500"/><rect x="16" y="23" width="16" height="12" rx="2"/><path d="M19.500 23v-3.500a4.500 4.500 0 0 1 9 0V23"/></svg>
+                </sc-if>
+                <span style="font-size:12px;line-height:1.25;color:#C8C8D0">Launcher Key</span>
+              </div>
+
+              <div class="{{ slotBClass }}" style="border:1px solid {{ slotBBorder }};background:#15151D;border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                <sc-if value="{{ doneB }}" hint-placeholder-val="{{ false }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500" fill="#80EAFF" fill-opacity=".12"/><path d="M18 31a5 5 0 0 1-.6-9.900A7 7 0 0 1 31 20a5 5 0 0 1 .5 11"/><path d="M24 36V25M20 28.500l4-4 4 4"/></svg>
+                </sc-if>
+                <sc-if value="{{ notDoneB }}" hint-placeholder-val="{{ true }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#4A4A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500"/><rect x="16" y="23" width="16" height="12" rx="2"/><path d="M19.500 23v-3.500a4.500 4.500 0 0 1 9 0V23"/></svg>
+                </sc-if>
+                <span style="font-size:12px;line-height:1.25;color:#C8C8D0">Draft Build</span>
+              </div>
+
+              <div class="{{ slotCClass }}" style="border:1px solid {{ slotCBorder }};background:#15151D;border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                <sc-if value="{{ doneC }}" hint-placeholder-val="{{ false }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500" fill="#80EAFF" fill-opacity=".12"/><path d="M17 36V13"/><path d="M17 14h15l-3.500 5 3.500 5H17"/></svg>
+                </sc-if>
+                <sc-if value="{{ notDoneC }}" hint-placeholder-val="{{ true }}">
+                  <svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#4A4A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="24,3 42,13.500 42,34.500 24,45 6,34.500 6,13.500"/><rect x="16" y="23" width="16" height="12" rx="2"/><path d="M19.500 23v-3.500a4.500 4.500 0 0 1 9 0V23"/></svg>
+                </sc-if>
+                <span style="font-size:12px;line-height:1.25;color:#C8C8D0">Installer-Ready</span>
+              </div>
+
+            </div>
+            <p style="margin:0;font-size:13px;color:#9A9AA8">Items are collectible and cannot be transferred.</p>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <button type="button" class="xq-btn" onClick="{{ reset }}" style="background:transparent;color:#C8C8D0;border:1.5px solid #4A4A57;border-radius:999px;padding:9px 18px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">Reset checklist</button>
+          <button aria-pressed="{{ soundOn }}" type="button" class="xq-btn" onClick="{{ toggleSound }}" style="background:transparent;color:#C8C8D0;border:1.5px solid #4A4A57;border-radius:999px;padding:9px 18px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">{{ soundLabel }}</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOD TO KNOW -->
+  <section id="notes" style="max-width:1200px;margin:0 auto;padding:80px 32px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">Good to know</span>
+      <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);line-height:1.15;letter-spacing:-0.015em;text-wrap:balance">Three rules that save you an evening</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:10px">
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px;letter-spacing:-0.015em">The computer sets the platform</h3>
+        <p style="margin:0;color:#C8C8D0">A Windows game uploaded from a Mac shows up as a macOS build. Upload each build from a computer with the same OS.</p>
+      </div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:10px">
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px;letter-spacing:-0.015em">The key is a secret</h3>
+        <p style="margin:0;color:#C8C8D0">Type it only at the hidden prompt in your terminal. If it lands in a chat, regenerate it in Publisher Account after testing.</p>
+      </div>
+      <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:10px">
+        <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px;letter-spacing:-0.015em">Next versions are patches</h3>
+        <p style="margin:0;color:#C8C8D0">Upload a new archive with the same game name and only the changes go out. List files your game rewrites, like saves, in the ignore list.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="max-width:1200px;margin:0 auto;padding:0 32px 80px">
+    <div style="background:#80EAFF;color:#0A0A0F;border-radius:24px;padding:48px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
+      <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:10px">
+        <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(26px,3.2vw,36px);line-height:1.12;letter-spacing:-0.02em;color:#0A0A0F;text-wrap:balance">Next up: Generate installer</h2>
+        <p style="margin:0;color:#0A0A0F;max-width:560px">Once your build is in Draft and configured, the next separate step is Launcher, Edit launcher, Settings, Launcher build, Generate. Installer generation is unstable right now, so this checklist stops one step before it.</p>
+      </div>
+      <a class="xq-btn" href="#quest" style="background:#0A0A0F;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:16px;padding:16px 28px;border-radius:999px">Back to the checklist</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid #2A2A35">
+    <div style="max-width:1200px;margin:0 auto;padding:28px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:#9A9AA8;font-size:13px">
+      <span>Game Jam × Xsolla Publisher. Based on Build Loader 1.23.0.</span>
+      <span>Publishing a build to players is not part of this checklist.</span>
+    </div>
+  </footer>
+</div>
+</template>
+<script>
+
+class DCLogic {
+  constructor(props) { this.props = props || {}; this.state = {}; this._q = false; }
+  setState(p) {
+    Object.assign(this.state, typeof p === 'function' ? p(this.state) : p);
+    if (!this._q) { this._q = true; var self = this; Promise.resolve().then(function () { self._q = false; render(); }); }
+  }
+}
+function look(scope, path) {
+  var parts = path.split('.'), v = scope;
+  for (var i = 0; i < parts.length; i++) { if (v == null) return undefined; v = v[parts[i]]; }
+  return v;
+}
+var PURE = /^\s*\{\{\s*([\w.]+)\s*\}\}\s*$/;
+function interp(str, scope) { return str.replace(/\{\{\s*([\w.]+)\s*\}\}/g, function (_, e) { var v = look(scope, e); return v == null ? '' : String(v); }); }
+function build(node, scope, out) {
+  if (node.nodeType === 3) { out.appendChild(document.createTextNode(interp(node.data, scope))); return; }
+  if (node.nodeType !== 1) return;
+  var tag = node.localName;
+  if (tag === 'sc-for') {
+    var list = look(scope, PURE.exec(node.getAttribute('list')||'')[1]) || [], as = node.getAttribute('as');
+    list.forEach(function (it) { var sc = Object.create(scope); sc[as] = it; Array.prototype.forEach.call(node.childNodes, function (c) { build(c, sc, out); }); });
+    return;
+  }
+  if (tag === 'sc-if') {
+    if (look(scope, PURE.exec(node.getAttribute('value')||'')[1])) Array.prototype.forEach.call(node.childNodes, function (c) { build(c, scope, out); });
+    return;
+  }
+  var el = document.createElementNS(node.namespaceURI, tag);
+  Array.prototype.forEach.call(node.attributes, function (a) {
+    var n = a.name, v = a.value;
+    if (n.indexOf('hint-') === 0) return;
+    var pm = PURE.exec(v);
+    if (/^on[a-z]/i.test(n) && pm) {
+      var fn = look(scope, pm[1]), ev = n.slice(2).toLowerCase();
+      if (ev === 'change' && (tag === 'input' || tag === 'textarea')) ev = 'input';
+      if (typeof fn === 'function') el['on' + ev] = fn;
+      return;
+    }
+    if (n === 'value' && (tag === 'input' || tag === 'textarea')) { el.__val = pm ? String(look(scope, pm[1]) == null ? '' : look(scope, pm[1])) : v; return; }
+    el.setAttribute(n, interp(v, scope));
+  });
+  Array.prototype.forEach.call(node.childNodes, function (c) { build(c, scope, el); });
+  out.appendChild(el);
+}
+function patch(oldN, newN) {
+  if (oldN.nodeType === 3) { if (oldN.data !== newN.data) oldN.data = newN.data; return; }
+  var i;
+  for (i = oldN.attributes.length - 1; i >= 0; i--) { var an = oldN.attributes[i].name; if (!newN.hasAttribute(an)) oldN.removeAttribute(an); }
+  for (i = 0; i < newN.attributes.length; i++) { var a = newN.attributes[i]; if (oldN.getAttribute(a.name) !== a.value) oldN.setAttribute(a.name, a.value); }
+  ['onclick', 'oninput', 'onchange'].forEach(function (k) { oldN[k] = newN[k] || null; });
+  if ('__val' in newN) { if (oldN.value !== newN.__val) oldN.value = newN.__val; }
+  var oc = oldN.childNodes, nc = newN.childNodes;
+  for (i = 0; i < nc.length; i++) {
+    if (i >= oc.length) { oldN.appendChild(nc[i].cloneNode(true)); copyState(oldN.lastChild, nc[i]); }
+    else if (oc[i].nodeType !== nc[i].nodeType || oc[i].nodeName !== nc[i].nodeName) { var c = nc[i].cloneNode(true); oldN.replaceChild(c, oc[i]); copyState(c, nc[i]); }
+    else patch(oc[i], nc[i]);
+  }
+  while (oldN.childNodes.length > nc.length) oldN.removeChild(oldN.lastChild);
+}
+function copyState(dst, src) {
+  if (src.nodeType !== 1) return;
+  ['onclick', 'oninput', 'onchange'].forEach(function (k) { if (src[k]) dst[k] = src[k]; });
+  if ('__val' in src) dst.value = src.__val;
+  for (var i = 0; i < src.childNodes.length; i++) copyState(dst.childNodes[i], src.childNodes[i]);
+}
+var app, tplEl, inst;
+function render() {
+  var out = document.createElement('div');
+  var scope = inst.renderVals();
+  Array.prototype.forEach.call(tplEl.content.childNodes, function (c) { build(c, scope, out); });
+  if (!app.firstChild) { while (out.firstChild) { var c = out.firstChild; app.appendChild(c); } return; }
+  patch(app, out);
+}
+function boot() {
+  app = document.getElementById('app'); tplEl = document.getElementById('tpl');
+  inst = new Component({});
+  if (inst.componentDidMount) inst.componentDidMount();
+  render();
+}
+
+var DL_B64 = '';
+var XQ_SALT = 'xsolla-launch-quest-v1';
+var XQ_ITEMS = { r1: 50, r2: 50, r3: 100, p1: 50, p2: 50, p3: 150, u1: 50, u2: 150, u3: 200, v1: 100, v2: 100, v3: 50 };
+var XQ_STAGES = [
+  { k: 'R', ids: ['r1', 'r2', 'r3'], name: 'Publisher Account' },
+  { k: 'A', ids: ['p1', 'p2', 'p3'], name: 'Launcher Key' },
+  { k: 'B', ids: ['u1', 'u2', 'u3'], name: 'Draft Build' },
+  { k: 'C', ids: ['v1', 'v2', 'v3'], name: 'Installer-Ready' }
+];
+var XQ_TOTAL = 1100;
+var XQ_RANKS = [[0, 'Jam Rookie'], [200, 'Scout'], [450, 'Build Crafter'], [800, 'Release Master'], [1100, 'Launcher Legend']];
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { done: {}, gameName: '', receipt: '', verdict: null, dlMsg: '', sound: true,
+      recent: {}, recentStages: {}, toast: '', toastId: 0, burst: '', burstId: 0, xpPop: '' };
+  }
+  componentDidMount() {
+    try {
+      var raw = localStorage.getItem('xq-landing-v2');
+      if (raw) {
+        var s = JSON.parse(raw);
+        this.setState({ done: s.done || {}, gameName: s.gameName || '', receipt: s.receipt || '', sound: s.sound !== false });
+        if (s.receipt) this.runVerify(s.receipt, s.gameName || '', true);
+      }
+    } catch (e) {}
+  }
+  persist(done, gameName, receipt, sound) {
+    try { localStorage.setItem('xq-landing-v2', JSON.stringify({ done: done, gameName: gameName, receipt: receipt, sound: sound })); } catch (e) {}
+  }
+  doneMap(manual, v) {
+    return {
+      r1: !!manual.r1, r2: !!manual.r2, r3: !!manual.r3,
+      p1: !!manual.p1, p2: !!manual.p2, p3: !!(v && v.c1 && v.c2),
+      u1: !!manual.u1, u2: !!(v && v.run), u3: !!(v && v.all),
+      v1: !!manual.v1, v2: !!manual.v2, v3: !!manual.v3
+    };
+  }
+  xpOf(map) { var t = 0; Object.keys(XQ_ITEMS).forEach(function (id) { if (map[id]) t += XQ_ITEMS[id]; }); return t; }
+  rankOf(xp) { var r = XQ_RANKS[0][1]; XQ_RANKS.forEach(function (x) { if (xp >= x[0]) r = x[1]; }); return r; }
+  toggleItem(id) {
+    var done = Object.assign({}, this.state.done);
+    var prev = this.doneMap(this.state.done, this.state.verdict);
+    if (done[id]) { delete done[id]; } else { done[id] = true; }
+    this.setState({ done: done });
+    this.persist(done, this.state.gameName, this.state.receipt, this.state.sound);
+    this.celebrate(prev, this.doneMap(done, this.state.verdict), false);
+  }
+  toggleSound() {
+    var s = !this.state.sound;
+    this.setState({ sound: s });
+    this.persist(this.state.done, this.state.gameName, this.state.receipt, s);
+    if (s) this.chime('ok');
+  }
+  async runVerify(receipt, gameName, silent) {
+    var v = null;
+    try { v = await this.checkReceipt(receipt, gameName); } catch (e) { v = null; }
+    var prev = this.doneMap(this.state.done, this.state.verdict);
+    this.setState({ verdict: v });
+    if (!silent) this.celebrate(prev, this.doneMap(this.state.done, v), true);
+  }
+  celebrate(prev, next, fromReceipt) {
+    var self = this, gained = 0, newly = {}, any = false;
+    Object.keys(XQ_ITEMS).forEach(function (id) { if (next[id] && !prev[id]) { gained += XQ_ITEMS[id]; newly[id] = true; any = true; } });
+    if (!any) return;
+    var stages = {}, last = null;
+    XQ_STAGES.forEach(function (s) {
+      var was = s.ids.every(function (id) { return prev[id]; });
+      var now = s.ids.every(function (id) { return next[id]; });
+      if (now && !was) { stages[s.k] = true; last = s; }
+    });
+    var rb = this.rankOf(this.xpOf(prev)), ra = this.rankOf(this.xpOf(next));
+    var finale = Object.keys(XQ_ITEMS).every(function (id) { return next[id]; });
+    var msg = '', burst = '', chime = 'ok';
+    if (finale) { msg = 'All twelve steps done. Everything is ready for Generate installer. +' + gained + ' XP'; burst = 'big'; chime = 'big'; }
+    else if (last) { msg = 'Stage complete. Item unlocked: ' + last.name + '. +' + gained + ' XP'; burst = 'big'; chime = 'stage'; }
+    else if (ra !== rb) { msg = 'Rank up: ' + ra + '. +' + gained + ' XP'; burst = 'small'; chime = 'stage'; }
+    else if (fromReceipt) { msg = 'Verified by your receipt. +' + gained + ' XP'; burst = 'small'; }
+    var tid = this.state.toastId + 1, bid = this.state.burstId + 1;
+    this.setState({ recent: newly, recentStages: stages, toast: msg, toastId: tid, burst: '', burstId: bid, xpPop: '+' + gained + ' XP' });
+    if (burst) setTimeout(function () { if (self.state.burstId === bid) self.setState({ burst: burst }); }, 40);
+    setTimeout(function () { if (self.state.burstId === bid) self.setState({ burst: '' }); }, 2400);
+    setTimeout(function () { if (self.state.burstId === bid) self.setState({ recent: {}, recentStages: {}, xpPop: '' }); }, 1500);
+    setTimeout(function () { if (self.state.toastId === tid) self.setState({ toast: '' }); }, 5000);
+    this.chime(chime);
+  }
+  chime(kind) {
+    if (!this.state.sound) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!this._ac) this._ac = new AC();
+      var ac = this._ac;
+      if (ac.state === 'suspended') ac.resume();
+      var seq = kind === 'big' ? [523.25, 659.25, 783.99, 1046.5] : kind === 'stage' ? [659.25, 880] : [783.99];
+      var t0 = ac.currentTime + 0.02;
+      seq.forEach(function (f, i) {
+        var o = ac.createOscillator(), g = ac.createGain(), t = t0 + i * 0.11;
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.12, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.32);
+      });
+    } catch (e) {}
+  }
+  particles(kind) {
+    if (!kind) return [];
+    var n = kind === 'big' ? 64 : 32, cols = ['#80EAFF', '#9580FF', '#D9FF66', '#FF5C93', '#FFFFFF'], out = [];
+    for (var i = 0; i < n; i++) {
+      var a = ((i * 137.5) % 360) * Math.PI / 180;
+      var d = (kind === 'big' ? 220 : 140) + ((i * 53) % 110);
+      var dy = Math.round(Math.sin(a) * d * 0.8 - 60);
+      out.push({ dx: Math.round(Math.cos(a) * d), dy: dy, dy2: dy + 110, rot: ((i * 47) % 720) - 360,
+        color: cols[i % 5], w: 6 + (i % 4) * 2, h: 8 + (i % 3) * 3, delay: (i % 7) * 25 });
+    }
+    return out;
+  }
+  async checkReceipt(text, name) {
+    var t = String(text || '').replace(/\r/g, '').trim();
+    if (!t) return null;
+    var lines = t.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    var f = {}, bodyLines = [], chk = '';
+    lines.forEach(function (l, i) {
+      if (i === 0) { bodyLines.push(l); return; }
+      var k = l.indexOf('=');
+      if (k < 1) { bodyLines.push(l); return; }
+      var key = l.slice(0, k), val = l.slice(k + 1);
+      if (key === 'check') { chk = val; } else { f[key] = val; bodyLines.push(l); }
+    });
+    var header = lines[0] === 'XSOLLA-QUEST-RECEIPT v1';
+    var digest = '';
+    try {
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(bodyLines.join('\n') + XQ_SALT));
+      digest = Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('').slice(0, 16);
+    } catch (e) { digest = ''; }
+    var intact = header && !!chk && !!digest && digest === chk;
+    var norm = function (s) { return String(s || '').trim().toLowerCase(); };
+    var typed = norm(name);
+    var okVer = /^\d+\.\d+/.test(f.builder_version || '');
+    var signer = f.builder_signer || f.builder_team || '';
+    var c1 = f.builder_signature_valid === 'yes' && okVer && (signer.indexOf('2FWGTXK3RK') >= 0 || /xsolla/i.test(signer));
+    var keyLen = parseInt(f.key_length, 10) || 0;
+    var c2 = f.init_result === 'success' && /^.{4}\.\.\..{3}$/.test(f.key_mask || '') && keyLen >= 8;
+    var c3 = !!typed && norm(f.game_name) === typed && norm(f.descr).indexOf(typed) === 0;
+    var bytes = parseInt(f.game_bytes, 10) || 0;
+    var exe = !!f.executable && f.executable !== 'none' && f.executable !== 'none|none';
+    var c4 = !!f.game_archive && bytes > 0 && exe && f.update_result === 'success' && f.stage === 'draft';
+    var listed = f.build_in_list === 'yes';
+    var ts = Date.parse(f.created_utc || ''), age = Date.now() - ts;
+    var c7 = !isNaN(ts) && age < 48 * 3600000 && age > -300000;
+    var mb = (bytes / 1048576).toFixed(1);
+    var checks = [
+      { label: 'Build Loader came from Xsolla', state: c1 ? 'ok' : 'fail',
+        detail: c1 ? 'Build Loader ' + f.builder_version + ', signature valid (' + signer + ').' : 'Not found, not signed by Xsolla or version unreadable. Download BuildLoader.zip for your OS from Publisher Account, Builds, Game builds.' },
+      { label: 'Real API key accepted', state: c2 ? 'ok' : 'fail',
+        detail: c2 ? 'Xsolla accepted the key ' + f.key_mask + ' (' + keyLen + ' characters).' : 'Build Loader did not accept the key. Copy the API key of this exact game again.' },
+      { label: 'Game name matches', state: c3 ? 'ok' : 'fail',
+        detail: c3 ? '“' + f.game_name + '” matches the name above.' : (!typed ? 'Type your game name in the field above first.' : 'Receipt says “' + (f.game_name || '') + '”, the field says “' + name.trim() + '”.') },
+      { label: 'Game uploaded to Draft', state: c4 ? 'ok' : 'fail',
+        detail: c4 ? f.game_archive + ' (' + mb + ' MB), platform ' + f.platform + ', start file ' + f.executable + '.' : 'No successful Draft upload with a start file was reported.' },
+      { label: 'Build listed by Xsolla', state: listed ? 'ok' : 'soft',
+        detail: listed ? 'The new build appears in Build Loader’s build list.' : 'Not confirmed by the app. Check the Draft row in stage 3.' },
+      { label: 'Receipt is untouched', state: intact ? 'ok' : 'fail',
+        detail: intact ? 'Integrity code matches.' : 'The integrity code does not match. Paste the receipt exactly as the app printed it.' },
+      { label: 'Receipt is fresh', state: c7 ? 'ok' : 'fail',
+        detail: c7 ? 'Created ' + f.created_utc + '.' : 'Receipt is older than 48 hours or has no valid date. Run the app again.' }
+    ];
+    var summary = f.game_archive ? (f.game_archive + ' (' + mb + ' MB) is in Draft as “' + (f.descr || '') + '”. Start file: ' + (f.executable || '?') + '.') : '';
+    return { checks: checks, c1: c1, c2: c2, run: c3 && c4 && c7, all: c1 && c2 && c3 && c4 && intact && c7, summary: summary };
+  }
+  download() {
+    this.setState({ dlMsg: 'Unzip it, then double-click Xsolla Upload.command (Mac) or Xsolla Upload.bat (Windows). On a Mac, if macOS blocks it, right-click the file, choose Open, then Open again.' });
+  }
+  renderVals() {
+    var self = this;
+    var v = this.state.verdict;
+    var manualDone = this.state.done;
+    var map = this.doneMap(manualDone, v);
+    var recent = this.state.recent, recentStages = this.state.recentStages;
+    function base(id, title, body) {
+      var d = !!map[id];
+      return { id: id, title: title, body: body, done: d, isDl: false, border: d ? '#80EAFF' : '#2A2A35',
+        pop: recent[id] ? 'xq-pop' : '', glow: recent[id] ? 'xq-glow' : '' };
+    }
+    function manual(id, title, body, extra) {
+      var d = !!map[id];
+      return Object.assign(base(id, title, body), {
+        isManual: true, isAuto: false,
+        label: (d ? 'Mark as not done: ' : 'Mark as done: ') + title,
+        toggle: function () { self.toggleItem(id); }
+      }, extra || {});
+    }
+    function auto(id, title, body) {
+      var ok = !!map[id];
+      return Object.assign(base(id, title, body), {
+        isManual: false, isAuto: true,
+        autoBorder: ok ? '#80EAFF' : '#4A4A57', autoBg: ok ? '#80EAFF' : 'transparent',
+        pill: ok ? 'Verified by receipt' : (v ? 'Check failed' : 'Needs receipt'),
+        pillColor: ok ? '#80EAFF' : (v ? '#FF5C93' : '#9A9AA8')
+      });
+    }
+    var register = [
+      manual('r1', 'Sign up in Publisher Account', 'Open publisher.xsolla.com/signup and create an account. The password needs at least 8 characters with a digit, a capital and a lowercase letter. Every sign-in sends a confirmation code (two-factor authentication).'),
+      manual('r2', 'Fill in your account details', 'Enter your first and last name, your role in the company, the company name (your full name if you sign up as an individual) and your country or region. A link to your game is optional. Click Next step.'),
+      manual('r3', 'Create your first project', 'Choose the type Game, enter the project name in English, pick release platforms, monetization, development stage, and genre and engine. Click Finish. Your project appears in the side menu and its project ID sits next to the name.')
+    ];
+    var prepare = [
+      manual('p1', 'Use a computer that matches your build', 'A Mac uploads macOS builds and a Windows PC uploads Windows builds. The platform comes from the computer, not from the files in your archive.'),
+      manual('p2', 'Add your game in Publisher Account', 'Open your project, then Launcher, Edit launcher, Games. If the game is already on the list, move on.'),
+      auto('p3', 'Download Build Loader and copy your API key', 'Games, Set up next to your game, Builds, Game builds. Download BuildLoader.zip for your computer’s OS into Downloads and copy the API key (launcher ID). The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.')
+    ];
+    var upload = [
+      manual('u1', 'Get the upload app', 'Save xsolla-upload.zip and unzip it. On a Mac double-click Xsolla Upload.command, on Windows double-click Xsolla Upload.bat. It needs Python 3 (a Mac offers to install it on the first run).', {
+        isDl: true, dlMsg: this.state.dlMsg, download: function () { self.download(); } }),
+      auto('u2', 'Run the app and upload your game', 'The app asks for your game (drag it into the window), the game name and your API key at a hidden prompt. Press Enter at each question you do not need. It checks the build, asks to confirm, then uploads to Draft.'),
+      auto('u3', 'Paste the receipt', 'When the upload finishes the app prints a receipt, copies it to your clipboard and saves it on your Desktop. Paste it in the verification box below.')
+    ];
+    var verify = [
+      manual('v1', 'Find the build in Draft', 'Game, Set up, Builds, Game builds. Your row shows Branch = draft. The table can lag a minute, so refresh the page.'),
+      manual('v2', 'Set the start file', 'On the Executable files tab, enter the start file exactly as the receipt shows it. Add redistributables such as VC++ on the Redistributables tab.'),
+      manual('v3', 'Stop before Publish', 'Draft builds are visible to testers only. Publish only after testing, because it reaches real players. Generate installer is a separate next step.')
+    ];
+    function count(list) { return list.filter(function (x) { return x.done; }).length; }
+    var cr = count(register), cp = count(prepare), cu = count(upload), cv = count(verify);
+    var total = cr + cp + cu + cv;
+    var xp = this.xpOf(map);
+    var status = total === 12 ? 'Everything is ready for Generate installer.' : total === 0 ? 'Start with stage 0.' : (12 - total) + ' steps to go.';
+    var doneR = cr === 3, doneA = cp === 3, doneB = cu === 3, doneC = cv === 3;
+    var palette = { ok: ['Passed', '#80EAFF'], fail: ['Failed', '#FF5C93'], soft: ['Not confirmed', '#F5A623'], idle: ['Waiting', '#9A9AA8'] };
+    var labels = ['Build Loader came from Xsolla', 'Real API key accepted', 'Game name matches', 'Game uploaded to Draft', 'Build listed by Xsolla', 'Receipt is untouched', 'Receipt is fresh'];
+    var checks = (v ? v.checks : labels.map(function (l) { return { label: l, state: 'idle', detail: 'Waiting for the receipt.' }; })).map(function (c, i) {
+      return { label: c.label, detail: c.detail, pill: palette[c.state][0], color: palette[c.state][1], cls: c.state === 'ok' ? 'xq-row' : '', delay: i * 80 };
+    });
+    var burst = this.state.burst;
+    return {
+      register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
+      prepareCount: cp, uploadCount: cu, verifyCount: cv,
+      doneCount: total, pct: Math.round(xp / XQ_TOTAL * 100), statusLine: status,
+      xp: xp, xpMax: XQ_TOTAL, rankName: this.rankOf(xp), xpPop: this.state.xpPop, hasXpPop: !!this.state.xpPop,
+      doneR: doneR, notDoneR: !doneR, slotRBorder: doneR ? '#80EAFF' : '#2A2A35', slotRClass: recentStages.R ? 'xq-glow' : '',
+      doneA: doneA, doneB: doneB, doneC: doneC,
+      notDoneA: !doneA, notDoneB: !doneB, notDoneC: !doneC,
+      slotABorder: doneA ? '#80EAFF' : '#2A2A35', slotAClass: recentStages.A ? 'xq-glow' : '',
+      slotBBorder: doneB ? '#80EAFF' : '#2A2A35', slotBClass: recentStages.B ? 'xq-glow' : '',
+      slotCBorder: doneC ? '#80EAFF' : '#2A2A35', slotCClass: recentStages.C ? 'xq-glow' : '',
+      gameName: this.state.gameName, receiptText: this.state.receipt,
+      receiptOk: !!(v && v.all), receiptSummary: v ? v.summary : '',
+      hasToast: !!this.state.toast, toast: this.state.toast,
+      hasBurst: !!burst, particles: this.particles(burst),
+      soundLabel: this.state.sound ? 'Sound: on' : 'Sound: off', soundOn: this.state.sound,
+      toggleSound: function () { self.toggleSound(); },
+      onGame: function (e) {
+        var val = e.target.value;
+        self.setState({ gameName: val });
+        self.persist(self.state.done, val, self.state.receipt, self.state.sound);
+        self.runVerify(self.state.receipt, val, false);
+      },
+      onReceipt: function (e) {
+        var val = e.target.value;
+        self.setState({ receipt: val });
+        self.persist(self.state.done, self.state.gameName, val, self.state.sound);
+        self.runVerify(val, self.state.gameName, false);
+      },
+      reset: function () { self.setState({ done: {}, gameName: '', receipt: '', verdict: null, toast: '', burst: '' }); self.persist({}, '', '', self.state.sound); }
+    };
+  }
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
