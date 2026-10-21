@@ -923,7 +923,7 @@ class Component extends DCLogic {
       register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
       demoText: dtext + (dtyping ? '\u258C' : ''), demoChecks: demoChecks, demoPill: demoOk ? 'Verified' : 'Printing...', demoPillBg: demoOk ? '#80EAFF' : '#F5A623',
       hasTicket: total === 12, ticketGame: (this.state.gameName || 'Your jam game'), ticketNo: tnum, ticketDate: tdate,
-      macLabel: M ? '#80EAFF' : '#9A9AA8', winLabel: !M ? '#80EAFF' : '#9A9AA8',
+      macLabel: '#80EAFF', winLabel: '#80EAFF',
       prepareCard: M ? 'Use a Mac with macOS 12.4 or newer, add the game in Publisher Account, get the macOS Build Loader and copy the game’s API key.' : 'Use a Windows 10 (64-bit) PC, add the game in Publisher Account, get the Windows Build Loader and copy the game’s API key.',
       hasSkipAll: !(v && v.all),
       skipAllNote: 'Receipt will not turn green? Maybe you uploaded another way or the app could not read the key. You can close the three receipt steps by hand and move on.',
