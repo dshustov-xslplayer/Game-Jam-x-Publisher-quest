@@ -27,6 +27,7 @@ a{color:#80EAFF}
 @media (prefers-reduced-motion:reduce){.xq-pop,.xq-glow,.xq-row{animation:none}.xq-p{display:none}.xq-bar{transition:none}}
 pre{margin:0}
 @media (max-width:720px){.xq-nav-links{display:none!important}}
+@media (max-width:900px){.xq-side{position:static!important;max-width:none!important}}
 
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -143,173 +144,7 @@ update_result=success
       </div>
 
       <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
-        <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:32px">
-
-          <!-- Stage 0 -->
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 0: Register in Publisher Account</span>
-              <span style="font-size:13px;color:#9A9AA8">{{ registerCount }} of 3</span>
-            </div>
-            <sc-for list="{{ register }}" as="it" hint-placeholder-count="3">
-              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
-                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
-                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
-                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
-                    </sc-if>
-                  </button>
-                </sc-if>
-                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
-                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
-                  </div>
-                </sc-if>
-                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
-                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
-                  </div>
-                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
-                </div>
-              </div>
-            </sc-for>
-                      <p style="margin:0;font-size:13px;color:#9A9AA8">Summary of <a href="https://developers.xsolla.com/ru/get-started/work-in-pa/create-first-project/" target="_blank" rel="noopener" style="color:#80EAFF">Create first project</a> in the Xsolla docs. Already have an account and a project? Tick the three steps and move on.</p>
-          </div>
-
-          <!-- Stage 1 -->
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 1: Prepare</span>
-              <span style="font-size:13px;color:#9A9AA8">{{ prepareCount }} of 3</span>
-            </div>
-            <sc-for list="{{ prepare }}" as="it" hint-placeholder-count="3">
-              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
-                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
-                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
-                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
-                    </sc-if>
-                  </button>
-                </sc-if>
-                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
-                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
-                  </div>
-                </sc-if>
-                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
-                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
-                  </div>
-                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
-                </div>
-              </div>
-            </sc-for>
-          </div>
-
-          <!-- Stage 2 -->
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 2: Upload with the app</span>
-              <span style="font-size:13px;color:#9A9AA8">{{ uploadCount }} of 3</span>
-              <span style="margin-left:auto;font-size:13px;color:#9A9AA8">Mac and Windows</span>
-            </div>
-            <sc-for list="{{ upload }}" as="it" hint-placeholder-count="3">
-              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
-                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
-                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
-                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
-                    </sc-if>
-                  </button>
-                </sc-if>
-                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
-                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
-                  </div>
-                </sc-if>
-                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
-                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
-                  </div>
-                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
-                  <sc-if value="{{ it.isDl }}" hint-placeholder-val="{{ false }}">
-                    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
-                      <a class="xq-btn" href="https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip" target="_blank" rel="noopener" onClick="{{ it.download }}" style="background:#80EAFF;color:#0A0A0F;text-decoration:none;display:inline-block;border-radius:999px;padding:12px 22px;font:600 14px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">Download xsolla-upload.zip</a>
-                      <span style="font-size:13px;color:#C8C8D0">{{ it.dlMsg }}</span>
-                    </div>
-                  </sc-if>
-                </div>
-              </div>
-            </sc-for>
-
-            <div style="background:#0A0A0F;border:1px solid #2A2A35;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px">
-              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px">Verification</span>
-              <label style="display:flex;flex-direction:column;gap:6px">
-                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Your game name (type the same name in the app)</span>
-                <input id="game-name" type="text" value="{{ gameName }}" onChange="{{ onGame }}" placeholder="My Jam Game" style="box-sizing:border-box;width:100%;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#FFFFFF;font:400 15px 'Aktiv Grotesk',system-ui,sans-serif">
-              </label>
-              <label style="display:flex;flex-direction:column;gap:6px">
-                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Receipt from the upload app</span>
-                <textarea id="receipt" rows="9" value="{{ receiptText }}" onChange="{{ onReceipt }}" placeholder="XSOLLA-QUEST-RECEIPT v1&#10;run_id=..." style="box-sizing:border-box;width:100%;min-height:150px;resize:vertical;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#C8C8D0;font:400 12.5px/1.6 'JetBrains Mono',ui-monospace,Menlo,monospace"></textarea>
-              </label>
-              <div style="display:flex;flex-direction:column">
-                <sc-for list="{{ checks }}" as="ck" hint-placeholder-count="7">
-                  <div class="{{ ck.cls }}" style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #2A2A35;animation-delay:{{ ck.delay }}ms">
-                    <span style="flex:none;min-width:104px;text-align:center;font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid {{ ck.color }};color:{{ ck.color }}">{{ ck.pill }}</span>
-                    <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
-                      <span style="font-weight:600;font-size:15px">{{ ck.label }}</span>
-                      <span style="font-size:13px;color:#9A9AA8;word-break:break-word">{{ ck.detail }}</span>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-              <sc-if value="{{ receiptOk }}" hint-placeholder-val="{{ false }}">
-                <div class="xq-pop" style="display:flex;gap:14px;align-items:flex-start;background:rgba(128,234,255,.08);border:1px solid #80EAFF;border-radius:16px;padding:16px 18px">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#80EAFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>
-                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px;color:#80EAFF">Receipt accepted</span><span style="font-size:14px;color:#C8C8D0;word-break:break-word">{{ receiptSummary }}</span></div>
-                </div>
-              </sc-if>
-              <p style="margin:0;font-size:13px;color:#9A9AA8">The page checks what the app reports about your upload. A receipt could still be edited by hand, so organizers can confirm winners in Publisher Account, Builds, Game builds.</p>
-            </div>
-          </div>
-
-          <!-- Stage 3 -->
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 3: Verify in Publisher Account</span>
-              <span style="font-size:13px;color:#9A9AA8">{{ verifyCount }} of 3</span>
-            </div>
-            <sc-for list="{{ verify }}" as="it" hint-placeholder-count="3">
-              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
-                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
-                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
-                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
-                    </sc-if>
-                  </button>
-                </sc-if>
-                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
-                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
-                  </div>
-                </sc-if>
-                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
-                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
-                  </div>
-                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
-                </div>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-
-        <!-- Progress + items -->
-        <aside style="flex:1 1 300px;min-width:0;background:#0A0A0F;border:1px solid #2A2A35;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:20px">
+        <aside class="xq-side" style="flex:1 1 300px;max-width:380px;min-width:0;position:sticky;top:24px;align-self:flex-start;background:#0A0A0F;border:1px solid #2A2A35;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:20px">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;justify-content:space-between;align-items:baseline">
               <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Progress</span>
@@ -377,6 +212,208 @@ update_result=success
           <button aria-pressed="{{ soundOn }}" type="button" class="xq-btn" onClick="{{ toggleSound }}" style="background:transparent;color:#C8C8D0;border:1.5px solid #4A4A57;border-radius:999px;padding:9px 18px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">{{ soundLabel }}</button>
           </div>
         </aside>
+        <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:32px">
+
+          <!-- Stage 0 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 0: Register in Publisher Account</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ registerCount }} of 3</span>
+            </div>
+            <sc-for list="{{ register }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                  <sc-if value="{{ it.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <div><a class="xq-btn" href="{{ it.link }}" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#80EAFF;text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid #80EAFF">{{ it.linkText }}</a></div>
+                  </sc-if>
+                  <sc-if value="{{ it.hasCmd }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:6px;background:#15151D;border:1px solid #2A2A35;border-radius:12px;padding:12px 14px">
+                      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">{{ it.cmdTitle }}</span>
+                      <pre style="white-space:pre-wrap;word-break:break-all;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.6;color:#C8C8D0;user-select:all">{{ it.cmd }}</pre>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+                      <p style="margin:0;font-size:13px;color:#9A9AA8">Summary of <a href="https://developers.xsolla.com/get-started/work-in-pa/create-first-project/" target="_blank" rel="noopener" style="color:#80EAFF">Create first project</a> in the Xsolla docs. Already have an account and a project? Tick the three steps and move on.</p>
+          </div>
+
+          <!-- Stage 1 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 1: Prepare</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ prepareCount }} of 3</span>
+            </div>
+            <sc-for list="{{ prepare }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                  <sc-if value="{{ it.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <div><a class="xq-btn" href="{{ it.link }}" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#80EAFF;text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid #80EAFF">{{ it.linkText }}</a></div>
+                  </sc-if>
+                  <sc-if value="{{ it.hasCmd }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:6px;background:#15151D;border:1px solid #2A2A35;border-radius:12px;padding:12px 14px">
+                      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">{{ it.cmdTitle }}</span>
+                      <pre style="white-space:pre-wrap;word-break:break-all;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.6;color:#C8C8D0;user-select:all">{{ it.cmd }}</pre>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Stage 2 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 2: Upload with the app</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ uploadCount }} of 3</span>
+              <span style="margin-left:auto;font-size:13px;color:#9A9AA8">Mac and Windows</span>
+            </div>
+            <sc-for list="{{ upload }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                  <sc-if value="{{ it.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <div><a class="xq-btn" href="{{ it.link }}" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#80EAFF;text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid #80EAFF">{{ it.linkText }}</a></div>
+                  </sc-if>
+                  <sc-if value="{{ it.hasCmd }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:6px;background:#15151D;border:1px solid #2A2A35;border-radius:12px;padding:12px 14px">
+                      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">{{ it.cmdTitle }}</span>
+                      <pre style="white-space:pre-wrap;word-break:break-all;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.6;color:#C8C8D0;user-select:all">{{ it.cmd }}</pre>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ it.isDl }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                      <a class="xq-btn" href="https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip" target="_blank" rel="noopener" onClick="{{ it.download }}" style="background:#80EAFF;color:#0A0A0F;text-decoration:none;display:inline-block;border-radius:999px;padding:12px 22px;font:600 14px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">Download xsolla-upload.zip</a>
+                      <span style="font-size:13px;color:#C8C8D0">{{ it.dlMsg }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="background:#0A0A0F;border:1px solid #2A2A35;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px">Verification</span>
+              <label style="display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Your game name (type the same name in the app)</span>
+                <input id="game-name" type="text" value="{{ gameName }}" onChange="{{ onGame }}" placeholder="My Jam Game" style="box-sizing:border-box;width:100%;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#FFFFFF;font:400 15px 'Aktiv Grotesk',system-ui,sans-serif">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Receipt from the upload app</span>
+                <textarea id="receipt" rows="9" value="{{ receiptText }}" onChange="{{ onReceipt }}" placeholder="XSOLLA-QUEST-RECEIPT v1&#10;run_id=..." style="box-sizing:border-box;width:100%;min-height:150px;resize:vertical;background:#15151D;border:1px solid #4A4A57;border-radius:12px;padding:12px 14px;color:#C8C8D0;font:400 12.5px/1.6 'JetBrains Mono',ui-monospace,Menlo,monospace"></textarea>
+              </label>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ checks }}" as="ck" hint-placeholder-count="7">
+                  <div class="{{ ck.cls }}" style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #2A2A35;animation-delay:{{ ck.delay }}ms">
+                    <span style="flex:none;min-width:104px;text-align:center;font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid {{ ck.color }};color:{{ ck.color }}">{{ ck.pill }}</span>
+                    <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-weight:600;font-size:15px">{{ ck.label }}</span>
+                      <span style="font-size:13px;color:#9A9AA8;word-break:break-word">{{ ck.detail }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ receiptOk }}" hint-placeholder-val="{{ false }}">
+                <div class="xq-pop" style="display:flex;gap:14px;align-items:flex-start;background:rgba(128,234,255,.08);border:1px solid #80EAFF;border-radius:16px;padding:16px 18px">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#80EAFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:16px;color:#80EAFF">Receipt accepted</span><span style="font-size:14px;color:#C8C8D0;word-break:break-word">{{ receiptSummary }}</span></div>
+                </div>
+              </sc-if>
+              <p style="margin:0;font-size:13px;color:#9A9AA8">The page checks what the app reports about your upload. A receipt could still be edited by hand, so organizers can confirm winners in Publisher Account, Builds, Game builds.</p>
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:18px">Stage 3: Verify in Publisher Account</span>
+              <span style="font-size:13px;color:#9A9AA8">{{ verifyCount }} of 3</span>
+            </div>
+            <sc-for list="{{ verify }}" as="it" hint-placeholder-count="3">
+              <div class="{{ it.glow }}" style="display:flex;gap:16px;align-items:flex-start;background:#0A0A0F;border:1px solid {{ it.border }};border-radius:16px;padding:20px">
+                <sc-if value="{{ it.isManual }}" hint-placeholder-val="{{ true }}">
+                  <button class="xq-chk {{ it.pop }}" type="button" onClick="{{ it.toggle }}" aria-pressed="{{ it.done }}" aria-label="{{ it.label }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid #4A4A57;background:#15151D;display:flex;align-items:center;justify-content:center;padding:0">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                      <span style="width:44px;height:44px;border-radius:12px;background:#80EAFF;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}">
+                  <div aria-hidden="true" class="{{ it.pop }}" style="flex:none;width:44px;height:44px;border-radius:12px;border:1.5px dashed {{ it.autoBorder }};background:{{ it.autoBg }};display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></sc-if>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <h3 style="margin:0;font-family:'Aktiv Grotesk',system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.3;color:#FFFFFF">{{ it.title }}</h3>
+                    <sc-if value="{{ it.isAuto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid {{ it.pillColor }};color:{{ it.pillColor }}">{{ it.pill }}</span></sc-if>
+                  </div>
+                  <p style="margin:0;color:#C8C8D0;font-size:15px">{{ it.body }}</p>
+                  <sc-if value="{{ it.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <div><a class="xq-btn" href="{{ it.link }}" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#80EAFF;text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid #80EAFF">{{ it.linkText }}</a></div>
+                  </sc-if>
+                  <sc-if value="{{ it.hasCmd }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:6px;background:#15151D;border:1px solid #2A2A35;border-radius:12px;padding:12px 14px">
+                      <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">{{ it.cmdTitle }}</span>
+                      <pre style="white-space:pre-wrap;word-break:break-all;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.6;color:#C8C8D0;user-select:all">{{ it.cmd }}</pre>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Progress + items -->
       </div>
     </div>
   </section>
@@ -677,7 +714,7 @@ class Component extends DCLogic {
     return { checks: checks, c1: c1, c2: c2, run: c3 && c4 && c7, all: c1 && c2 && c3 && c4 && intact && c7, summary: summary };
   }
   download() {
-    this.setState({ dlMsg: 'Unzip it, then double-click Xsolla Upload.command (Mac) or Xsolla Upload.bat (Windows). On a Mac, if macOS blocks it, right-click the file, choose Open, then Open again.' });
+    this.setState({ dlMsg: 'Unzip it, then double-click Xsolla Upload.command (Mac) or Xsolla Upload.bat (Windows). If a Mac blocks it: System Settings, Privacy & Security, Open Anyway.' });
   }
   renderVals() {
     var self = this;
@@ -687,7 +724,7 @@ class Component extends DCLogic {
     var recent = this.state.recent, recentStages = this.state.recentStages;
     function base(id, title, body) {
       var d = !!map[id];
-      return { id: id, title: title, body: body, done: d, isDl: false, border: d ? '#80EAFF' : '#2A2A35',
+      return { id: id, title: title, body: body, done: d, isDl: false, hasLink: false, hasCmd: false, border: d ? '#80EAFF' : '#2A2A35',
         pop: recent[id] ? 'xq-pop' : '', glow: recent[id] ? 'xq-glow' : '' };
     }
     function manual(id, title, body, extra) {
@@ -708,7 +745,7 @@ class Component extends DCLogic {
       });
     }
     var register = [
-      manual('r1', 'Sign up in Publisher Account', 'Open publisher.xsolla.com/signup and create an account. The password needs at least 8 characters with a digit, a capital and a lowercase letter. Every sign-in sends a confirmation code (two-factor authentication).'),
+      manual('r1', 'Sign up in Publisher Account', 'Open publisher.xsolla.com/signup and create an account. The password needs at least 8 characters with a digit, a capital and a lowercase letter. Every sign-in sends a confirmation code (two-factor authentication).', { hasLink: true, link: 'https://publisher.xsolla.com/', linkText: 'Open publisher.xsolla.com' }),
       manual('r2', 'Fill in your account details', 'Enter your first and last name, your role in the company, the company name (your full name if you sign up as an individual) and your country or region. A link to your game is optional. Click Next step.'),
       manual('r3', 'Create your first project', 'Choose the type Game, enter the project name in English, pick release platforms, monetization, development stage, and genre and engine. Click Finish. Your project appears in the side menu and its project ID sits next to the name.')
     ];
@@ -718,7 +755,8 @@ class Component extends DCLogic {
       auto('p3', 'Download Build Loader and copy your API key', 'Games, Set up next to your game, Builds, Game builds. Download BuildLoader.zip for your computer’s OS into Downloads and copy the API key (launcher ID). The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.')
     ];
     var upload = [
-      manual('u1', 'Get the upload app', 'Save xsolla-upload.zip and unzip it. On a Mac double-click Xsolla Upload.command, on Windows double-click Xsolla Upload.bat. It needs Python 3 (a Mac offers to install it on the first run).', {
+      manual('u1', 'Get the upload app', 'Save xsolla-upload.zip and unzip it. On a Mac double-click Xsolla Upload.command, on Windows double-click Xsolla Upload.bat. It needs Python 3 (a Mac offers to install it on the first run). If macOS says it could not verify the file, that is expected: the app is not notarized by Apple. Open System Settings, Privacy & Security, scroll down and click Open Anyway, or use the Terminal command below.', {
+        hasCmd: true, cmdTitle: 'Mac, optional: download, unlock and start in one command (Terminal)', cmd: 'cd ~/Downloads && curl -fsSLO https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip && unzip -oq xsolla-upload.zip && xattr -dr com.apple.quarantine xsolla-upload && open "xsolla-upload/Xsolla Upload.command"',
         isDl: true, dlMsg: this.state.dlMsg, download: function () { self.download(); } }),
       auto('u2', 'Run the app and upload your game', 'The app asks for your game (drag it into the window), the game name and your API key at a hidden prompt. Press Enter at each question you do not need. It checks the build, asks to confirm, then uploads to Draft.'),
       auto('u3', 'Paste the receipt', 'When the upload finishes the app prints a receipt, copies it to your clipboard and saves it on your Desktop. Paste it in the verification box below.')

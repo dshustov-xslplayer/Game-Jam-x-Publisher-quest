@@ -1,6 +1,10 @@
 Xsolla Upload (Game Jam Launch Quest edition)
 
-macOS:   double-click "Xsolla Upload.command"  (first time: right-click > Open > Open)
+macOS:   double-click "Xsolla Upload.command"
+         If macOS says it "could not verify" the file (the app is not notarized by Apple):
+           a) System Settings > Privacy & Security > scroll down > "Open Anyway" next to the file, or
+           b) in Terminal run:  xattr -dr com.apple.quarantine ~/Downloads/xsolla-upload
+              then double-click again.
 Windows: double-click "Xsolla Upload.bat"
 
 Needs Python 3.8+ (macOS offers to install it on first run; Windows: python.org).
