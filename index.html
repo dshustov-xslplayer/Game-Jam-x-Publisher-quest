@@ -35,8 +35,9 @@ a{color:#80EAFF}
 @media (prefers-reduced-motion:reduce){.xq-drop,.xq-cloud,.xq-pop2,.xq-pop,.xq-glow,.xq-row,.xq-cloud,.xq-pop2{animation:none}.xq-p{display:none}.xq-bar{transition:none}}
 pre{margin:0}
 @media (max-width:720px){.xq-nav-links{display:none!important}}
-.xq-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:32px;align-items:start}
-@media (max-width:760px){.xq-layout{grid-template-columns:minmax(0,1fr)}.xq-side{position:static!important}}
+.xq-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:32px;align-items:start}
+.xq-side{order:2}
+@media (max-width:760px){.xq-layout{grid-template-columns:minmax(0,1fr)}.xq-side{position:static!important;order:-1}}
 
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -226,6 +227,25 @@ html{scroll-behavior:smooth}
           </div>
         </aside>
         <div style="min-width:0;display:flex;flex-direction:column;gap:32px">
+
+          <!-- Scenario switch -->
+          <div style="display:flex;flex-direction:column;gap:16px;background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:20px">
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9A9AA8">Your scenario</span><span style="font-size:14px;color:#C8C8D0">Pick the computer you upload from. Loader, upload app and installers differ by OS.</span></div>
+              <div role="group" aria-label="Operating system" style="display:inline-flex;background:#0A0A0F;border:1px solid #2A2A35;border-radius:999px;padding:4px;gap:4px">
+                <button type="button" class="xq-btn" onClick="{{ setMac }}" aria-pressed="{{ isMac }}" style="border:0;border-radius:999px;padding:9px 20px;font:600 14px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer;background:{{ macBg }};color:{{ macFg }}">macOS</button>
+                <button type="button" class="xq-btn" onClick="{{ setWin }}" aria-pressed="{{ isWin }}" style="border:0;border-radius:999px;padding:9px 20px;font:600 14px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer;background:{{ winBg }};color:{{ winFg }}">Windows</button>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+              <sc-for list="{{ scenario }}" as="sc" hint-placeholder-count="3">
+                <div style="background:#0A0A0F;border:1px solid #2A2A35;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+                  <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">{{ sc.title }}</span>
+                  <span style="font-size:13px;color:#C8C8D0">{{ sc.text }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
 
           <!-- Stage 0 -->
           <div style="display:flex;flex-direction:column;gap:12px">
@@ -444,7 +464,7 @@ html{scroll-behavior:smooth}
                 <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Launch Ticket</span>
                 <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(20px,2.4vw,28px);line-height:1.12;letter-spacing:-0.02em;text-wrap:balance">Successful launch with Xsolla</span>
                 <span style="font-size:15px;font-weight:600;word-break:break-word">{{ ticketGame }}</span>
-                <span style="font-size:13px;opacity:.8">Route: Publisher Account, Draft build, Generate installer. Admit one game.</span>
+                <span style="font-size:13px;opacity:.8">{{ ticketRoute }}</span>
               </div>
               <div aria-hidden="true" style="flex:none;width:0;border-left:3px dashed rgba(10,10,15,.45);margin:10px 0"></div>
               <div style="flex:none;width:150px;padding:20px 18px;display:flex;flex-direction:column;justify-content:center;gap:4px;background:rgba(255,255,255,.18)">
@@ -489,7 +509,7 @@ html{scroll-behavior:smooth}
     <div style="background:#80EAFF;color:#0A0A0F;border-radius:24px;padding:48px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
       <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:10px">
         <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(26px,3.2vw,36px);line-height:1.12;letter-spacing:-0.02em;color:#0A0A0F;text-wrap:balance">Next up: Generate installer</h2>
-        <p style="margin:0;color:#0A0A0F;max-width:560px">Once your build is in Draft and configured, the next separate step is Launcher, Edit launcher, Settings, Launcher build, Generate. Installer generation is unstable right now, so this checklist stops one step before it.</p>
+        <p style="margin:0;color:#0A0A0F;max-width:560px">{{ ctaText }}</p>
       </div>
       <a class="xq-btn" href="#quest" style="background:#0A0A0F;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:16px;padding:16px 28px;border-radius:999px">Back to the checklist</a>
     </div>
@@ -596,33 +616,36 @@ var XQ_STAGES = [
   { k: 'C', ids: ['v1', 'v2', 'v3'], name: 'Installer-Ready' }
 ];
 var XQ_TOTAL = 1100;
-var DEMO_LINES = ['XSOLLA-QUEST-RECEIPT v1', 'builder_version=1.23.0', 'builder_signer=Xsolla (USA), Inc (2FWGTXK3RK)', 'builder_signature_valid=yes', 'key_mask=AB12...xyz', 'init_result=success', 'game_name=My Jam Game', 'game_archive=game.zip', 'update_result=success', 'build_in_list=yes', 'check=2f4ab0fcb681ac48'];
-var DEMO_CHECKS = [['Build Loader came from Xsolla', 3], ['Real API key accepted', 5], ['Game name matches', 6], ['Game uploaded to Draft', 8], ['Build listed by Xsolla', 9], ['Receipt is untouched', 10], ['Receipt is fresh', 10]];
+function guessOs() { try { return /win/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '') ? 'win' : 'mac'; } catch (e) { return 'mac'; } }
+var DEMO_LINES = ['XSOLLA-QUEST-RECEIPT v1', 'builder_version=1.23.0', 'builder_signer=Xsolla (USA), Inc (2FWGTXK3RK)', 'builder_signature_valid=yes', 'key_mask=AB12...xyz', 'init_result=success', 'game_name=My Jam Game', 'game_archive=game.zip', 'platform=__P__', 'update_result=success', 'build_in_list=yes', 'check=2f4ab0fcb681ac48'];
+var DEMO_CHECKS = [['Build Loader came from Xsolla', 3], ['Real API key accepted', 5], ['Game name matches', 6], ['Platform matches your scenario', 8], ['Game uploaded to Draft', 9], ['Build listed by Xsolla', 10], ['Receipt is untouched', 11], ['Receipt is fresh', 11]];
 var XQ_RANKS = [[0, 'Jam Rookie'], [200, 'Scout'], [450, 'Build Crafter'], [800, 'Release Master'], [1100, 'Launcher Legend']];
 class Component extends DCLogic {
   constructor(props) {
     super(props);
     this.state = { done: {}, gameName: '', receipt: '', verdict: null, dlMsg: '', sound: true,
-      recent: {}, recentStages: {}, toast: '', toastId: 0, burst: '', burstId: 0, xpPop: '', demoN: 0, cloudPop: '' };
+      recent: {}, recentStages: {}, toast: '', toastId: 0, burst: '', burstId: 0, xpPop: '', demoN: 0, cloudPop: '', os: guessOs() };
   }
   componentDidMount() {
     var self = this;
     var reduce = false;
     try { reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-    var DT = DEMO_LINES.join('\n').length;
+    var DT = DEMO_LINES.join('\n').length - 2;
     if (reduce) { this.setState({ demoN: DT }); }
     else { this._demo = setInterval(function () { var n = self.state.demoN + 2; if (n > DT + 56) n = 0; self.setState({ demoN: n }); }, 45); }
     try {
       var raw = localStorage.getItem('xq-landing-v2');
       if (raw) {
         var s = JSON.parse(raw);
-        this.setState({ done: s.done || {}, gameName: s.gameName || '', receipt: s.receipt || '', sound: s.sound !== false });
+        var os0 = (s.os === 'win' || s.os === 'mac') ? s.os : this.state.os;
+        this.setState({ done: s.done || {}, gameName: s.gameName || '', receipt: s.receipt || '', sound: s.sound !== false, os: os0 });
         if (s.receipt) this.runVerify(s.receipt, s.gameName || '', true);
       }
     } catch (e) {}
   }
-  persist(done, gameName, receipt, sound) {
-    try { localStorage.setItem('xq-landing-v2', JSON.stringify({ done: done, gameName: gameName, receipt: receipt, sound: sound })); } catch (e) {}
+  persist(done, gameName, receipt, sound, os) {
+    if (os === undefined) os = this.state.os;
+    try { localStorage.setItem('xq-landing-v2', JSON.stringify({ done: done, gameName: gameName, receipt: receipt, sound: sound, os: os })); } catch (e) {}
   }
   doneMap(manual, v) {
     return {
@@ -648,9 +671,15 @@ class Component extends DCLogic {
     this.persist(this.state.done, this.state.gameName, this.state.receipt, s);
     if (s) this.chime('ok');
   }
+  setOs(os) {
+    if (os === this.state.os) return;
+    this.setState({ os: os, dlMsg: '' });
+    this.persist(this.state.done, this.state.gameName, this.state.receipt, this.state.sound, os);
+    if (this.state.receipt) this.runVerify(this.state.receipt, this.state.gameName, true);
+  }
   async runVerify(receipt, gameName, silent) {
     var v = null;
-    try { v = await this.checkReceipt(receipt, gameName); } catch (e) { v = null; }
+    try { v = await this.checkReceipt(receipt, gameName, this.state.os); } catch (e) { v = null; }
     var prev = this.doneMap(this.state.done, this.state.verdict);
     this.setState({ verdict: v });
     if (!silent) this.celebrate(prev, this.doneMap(this.state.done, v), true);
@@ -712,7 +741,7 @@ class Component extends DCLogic {
     }
     return out;
   }
-  async checkReceipt(text, name) {
+  async checkReceipt(text, name, os) {
     var t = String(text || '').replace(/\r/g, '').trim();
     if (!t) return null;
     var lines = t.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
@@ -745,6 +774,8 @@ class Component extends DCLogic {
     var listed = f.build_in_list === 'yes';
     var ts = Date.parse(f.created_utc || ''), age = Date.now() - ts;
     var c7 = !isNaN(ts) && age < 48 * 3600000 && age > -300000;
+    var exeName = String(f.executable || '');
+    var c8 = os === 'win' ? (f.platform === 'win' || /\.exe$/i.test(exeName)) : (f.platform === 'mac' || /\.app$/i.test(exeName));
     var mb = (bytes / 1048576).toFixed(1);
     var checks = [
       { label: 'Build Loader came from Xsolla', state: c1 ? 'ok' : 'fail',
@@ -755,6 +786,8 @@ class Component extends DCLogic {
         detail: c3 ? '“' + f.game_name + '” matches the name above.' : (!typed ? 'Type your game name in the field above first.' : 'Receipt says “' + (f.game_name || '') + '”, the field says “' + name.trim() + '”.') },
       { label: 'Game uploaded to Draft', state: c4 ? 'ok' : 'fail',
         detail: c4 ? f.game_archive + ' (' + mb + ' MB), platform ' + f.platform + ', start file ' + f.executable + '.' : 'No successful Draft upload with a start file was reported.' },
+      { label: 'Platform matches your scenario', state: c8 ? 'ok' : 'fail',
+        detail: c8 ? (os === 'win' ? 'Windows build with a .exe start file.' : 'macOS build with a .app start file.') : ('You picked ' + (os === 'win' ? 'Windows' : 'macOS') + ' but the receipt describes a ' + (f.platform || 'different') + ' build (' + (exeName || 'no start file') + '). Switch the scenario or upload the right build.') },
       { label: 'Build listed by Xsolla', state: listed ? 'ok' : 'soft',
         detail: listed ? 'The new build appears in Build Loader’s build list.' : 'Not confirmed by the app. Check the Draft row in stage 3.' },
       { label: 'Receipt is untouched', state: intact ? 'ok' : 'fail',
@@ -763,10 +796,12 @@ class Component extends DCLogic {
         detail: c7 ? 'Created ' + f.created_utc + '.' : 'Receipt is older than 48 hours or has no valid date. Run the app again.' }
     ];
     var summary = f.game_archive ? (f.game_archive + ' (' + mb + ' MB) is in Draft as “' + (f.descr || '') + '”. Start file: ' + (f.executable || '?') + '.') : '';
-    return { checks: checks, c1: c1, c2: c2, run: c3 && c4 && c7, all: c1 && c2 && c3 && c4 && intact && c7, summary: summary };
+    return { checks: checks, c1: c1, c2: c2, run: c3 && c4 && c7 && c8, all: c1 && c2 && c3 && c4 && intact && c7 && c8, summary: summary };
   }
   download() {
-    this.setState({ dlMsg: 'Unzip it, then double-click Xsolla Upload.command (Mac) or Xsolla Upload.bat (Windows). If a Mac blocks it: System Settings, Privacy & Security, Open Anyway.' });
+    this.setState({ dlMsg: this.state.os === 'win'
+      ? 'Unzip it, then double-click Xsolla Upload.bat. If SmartScreen appears: More info, then Run anyway.'
+      : 'Unzip it, then double-click Xsolla Upload.command. If macOS blocks it: System Settings, Privacy & Security, Open Anyway.' });
   }
   renderVals() {
     var self = this;
@@ -804,22 +839,45 @@ class Component extends DCLogic {
       manual('r2', 'Fill in your account details', 'Enter your first and last name, your role in the company, the company name (your full name if you sign up as an individual) and your country or region. A link to your game is optional. Click Next step.'),
       manual('r3', 'Create your first project', 'Choose the type Game, enter the project name in English, pick release platforms, monetization, development stage, and genre and engine. Click Finish. Your project appears in the side menu and its project ID sits next to the name.')
     ];
+    var M = this.state.os !== 'win';
+    var ZIP = 'https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip';
     var prepare = [
-      manual('p1', 'Use a computer that matches your build', 'A Mac uploads macOS builds and a Windows PC uploads Windows builds. The platform comes from the computer, not from the files in your archive.'),
+      manual('p1', M ? 'Use a Mac with macOS 12.4 or newer' : 'Use a Windows 10 (64-bit) PC',
+        M ? 'Build Loader creates a macOS build on a Mac, so your game archive must contain a .app. Free disk space of about 1.5 times the game size is needed.'
+          : 'Build Loader creates a Windows build on a Windows PC, so your game folder must contain a .exe in its root. Free disk space of about 1.5 times the game size is needed.'),
       manual('p2', 'Add your game in Publisher Account', 'Open your project, then Launcher, Edit launcher, Games. If the game is already on the list, move on.'),
-      auto('p3', 'Download Build Loader and copy your API key', 'Games, Set up next to your game, Builds, Game builds. Download BuildLoader.zip for your computer’s OS into Downloads and copy the API key (launcher ID). The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.')
+      auto('p3', M ? 'Download Build Loader for macOS and copy your API key' : 'Download Build Loader for Windows and copy your API key',
+        'Games, Set up next to your game, Builds, Game builds. Click BuildLoader.zip for ' + (M ? 'macOS (it unpacks to Mac/build_loader)' : 'Windows (it unpacks to Win\\build_loader.exe)') + ' and save it to Downloads, then copy the API key (launcher ID) with the plus icon. The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.')
     ];
     var upload = [
-      manual('u1', 'Get the upload app', 'Save xsolla-upload.zip and unzip it. On a Mac double-click Xsolla Upload.command, on Windows double-click Xsolla Upload.bat. It needs Python 3 (a Mac offers to install it on the first run). If macOS says it could not verify the file, that is expected: the app is not notarized by Apple. Open System Settings, Privacy & Security, scroll down and click Open Anyway, or use the Terminal command below.', {
-        hasCmd: true, cmdTitle: 'Mac, optional: download, unlock and start in one command (Terminal)', cmd: 'cd ~/Downloads && curl -fsSLO https://raw.githubusercontent.com/dshustov-xslplayer/game-jam-x-publisher-quest/main/xsolla-upload.zip && unzip -oq xsolla-upload.zip && xattr -dr com.apple.quarantine xsolla-upload && open "xsolla-upload/Xsolla Upload.command"',
+      manual('u1', M ? 'Get the upload app for Mac' : 'Get the upload app for Windows',
+        M ? 'Save xsolla-upload.zip, unzip it and double-click Xsolla Upload.command. It needs Python 3 (macOS offers to install it on the first run). If macOS says it could not verify the file, that is expected: the app is not notarized by Apple. Open System Settings, Privacy & Security, scroll down and click Open Anyway, or use the Terminal command below.'
+          : 'Save xsolla-upload.zip, unzip it and double-click Xsolla Upload.bat. It needs Python 3 from python.org (tick Add python.exe to PATH). If Windows SmartScreen appears, click More info, then Run anyway, or use the PowerShell command below.', {
+        hasCmd: true,
+        cmdTitle: M ? 'Mac, optional: download, unlock and start in one command (Terminal)' : 'Windows, optional: download and start in one command (PowerShell)',
+        cmd: M ? 'cd ~/Downloads && curl -fsSLO ' + ZIP + ' && unzip -oq xsolla-upload.zip && xattr -dr com.apple.quarantine xsolla-upload && open "xsolla-upload/Xsolla Upload.command"'
+               : 'cd $env:USERPROFILE\\Downloads; Invoke-WebRequest ' + ZIP + ' -OutFile xsolla-upload.zip; Expand-Archive xsolla-upload.zip -DestinationPath . -Force; & ".\\xsolla-upload\\Xsolla Upload.bat"',
         isDl: true, dlMsg: this.state.dlMsg, download: function () { self.download(); } }),
-      auto('u2', 'Run the app and upload your game', 'The app asks for your game (drag it into the window), the game name and your API key at a hidden prompt. Press Enter at each question you do not need. It checks the build, asks to confirm, then uploads to Draft.'),
+      auto('u2', 'Run the app and upload your game',
+        M ? 'The app asks for your game (drag the .app or its .zip into the window), the game name and your API key at a hidden prompt. Press Enter at each question you do not need. It checks the build, asks to confirm, then uploads to Draft.'
+          : 'The app asks for your game (drag the game folder or its .zip into the window), the game name and your API key at a hidden prompt. Keep the game path in Latin letters and shorter than 260 characters, for example C:\\Games\\MyGame. The app checks the build, asks to confirm, then uploads to Draft.'),
       auto('u3', 'Paste the receipt', 'When the upload finishes the app prints a receipt, copies it to your clipboard and saves it on your Desktop. Paste it in the verification box below.')
     ];
     var verify = [
       manual('v1', 'Find the build in Draft', 'Game, Set up, Builds, Game builds. Your row shows Branch = draft. The table can lag a minute, so refresh the page.'),
-      manual('v2', 'Set the start file', 'On the Executable files tab, enter the start file exactly as the receipt shows it. Add redistributables such as VC++ on the Redistributables tab.'),
-      manual('v3', 'Stop before Publish', 'Draft builds are visible to testers only. Publish only after testing, because it reaches real players. Generate installer is a separate next step.')
+      manual('v2', 'Set the start file',
+        M ? 'On the Executable files tab, in the macOS row, enter the start file exactly as the receipt shows it (the name of your .app).'
+          : 'On the Executable files tab, in the Windows row, enter the start file exactly as the receipt shows it (for example game.exe). Add redistributables such as VC++ on the Redistributables tab.'),
+      manual('v3', 'Stop before Publish', 'Draft builds are visible to testers only. Publish only after testing, because it reaches real players. ' + (M ? 'On macOS the next step builds one standalone installer.' : 'On Windows the next step builds two installers: web and standalone.'))
+    ];
+    var scenario = M ? [
+      { title: 'Build Loader', text: 'BuildLoader.zip for macOS, macOS 12.4 or newer. The tool is Mac/build_loader.' },
+      { title: 'Upload app', text: 'Xsolla Upload.command. macOS may ask you to allow it: Privacy & Security, Open Anyway.' },
+      { title: 'Installer', text: 'Only a standalone installer is generated for macOS.' }
+    ] : [
+      { title: 'Build Loader', text: 'BuildLoader.zip for Windows, Windows 10 64-bit. The tool is Win\\build_loader.exe.' },
+      { title: 'Upload app', text: 'Xsolla Upload.bat. If SmartScreen appears: More info, Run anyway. Keep the game path in Latin letters, under 260 characters.' },
+      { title: 'Installer', text: 'Two installers: a small web installer that needs internet and a standalone one that works offline.' }
     ];
     function count(list) { return list.filter(function (x) { return x.done; }).length; }
     var cr = count(register), cp = count(prepare), cu = count(upload), cv = count(verify);
@@ -828,7 +886,7 @@ class Component extends DCLogic {
     var status = total === 12 ? 'Everything is ready for Generate installer.' : total === 0 ? 'Start with stage 0.' : (12 - total) + ' steps to go.';
     var doneR = cr === 3, doneA = cp === 3, doneB = cu === 3, doneC = cv === 3;
     var palette = { ok: ['Passed', '#80EAFF'], fail: ['Failed', '#FF5C93'], soft: ['Not confirmed', '#F5A623'], idle: ['Waiting', '#9A9AA8'] };
-    var labels = ['Build Loader came from Xsolla', 'Real API key accepted', 'Game name matches', 'Game uploaded to Draft', 'Build listed by Xsolla', 'Receipt is untouched', 'Receipt is fresh'];
+    var labels = ['Build Loader came from Xsolla', 'Real API key accepted', 'Game name matches', 'Game uploaded to Draft', 'Platform matches your scenario', 'Build listed by Xsolla', 'Receipt is untouched', 'Receipt is fresh'];
     var checks = (v ? v.checks : labels.map(function (l) { return { label: l, state: 'idle', detail: 'Waiting for the receipt.' }; })).map(function (c, i) {
       return { label: c.label, detail: c.detail, pill: palette[c.state][0], color: palette[c.state][1], cls: c.state === 'ok' ? 'xq-row' : '', delay: i * 80 };
     });
@@ -837,7 +895,7 @@ class Component extends DCLogic {
     var tkey = (rid || (this.state.gameName || 'jam')).replace(/[^\w]/g, '').toUpperCase();
     var tnum = 'XQ-' + (tkey + '00000000').slice(0, 8);
     var tdate = new Date().toISOString().slice(0, 10);
-    var dn = this.state.demoN, full = DEMO_LINES.join('\n'), dtext = full.slice(0, dn), dtyping = dn < full.length;
+    var dn = this.state.demoN, full = DEMO_LINES.join('\n').replace('__P__', this.state.os === 'win' ? 'win' : 'mac'), dtext = full.slice(0, dn), dtyping = dn < full.length;
     var starts = [], acc = 0; DEMO_LINES.forEach(function (l) { starts.push(acc + l.length); acc += l.length + 1; });
     var demoChecks = DEMO_CHECKS.map(function (c) { var ok = dn >= starts[c[1]]; return { label: c[0], pill: ok ? 'Passed' : 'Waiting', color: ok ? '#80EAFF' : '#4A4A57' }; });
     var demoOk = dn >= full.length;
@@ -848,6 +906,12 @@ class Component extends DCLogic {
       register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
       demoText: dtext + (dtyping ? '\u258C' : ''), demoChecks: demoChecks, demoPill: demoOk ? 'Verified' : 'Printing...', demoPillBg: demoOk ? '#80EAFF' : '#F5A623',
       hasTicket: total === 12, ticketGame: (this.state.gameName || 'Your jam game'), ticketNo: tnum, ticketDate: tdate,
+      scenario: scenario, isMac: M, isWin: !M,
+      macBg: M ? '#80EAFF' : 'transparent', macFg: M ? '#0A0A0F' : '#C8C8D0', winBg: !M ? '#80EAFF' : 'transparent', winFg: !M ? '#0A0A0F' : '#C8C8D0',
+      setMac: function () { self.setOs('mac'); }, setWin: function () { self.setOs('win'); },
+      ctaText: M ? 'Once your build is in Draft and configured, the next separate step is Launcher, Edit launcher, Settings, Launcher build, Generate. For macOS one standalone installer is built, signed with an Xsolla certificate. Generation can take up to several hours, and it is unstable right now, so this checklist stops one step before it.'
+                 : 'Once your build is in Draft and configured, the next separate step is Launcher, Edit launcher, Settings, Launcher build, Generate. For Windows two installers are built, a web one and a standalone one, signed with an Xsolla certificate. Generation can take up to several hours, and it is unstable right now, so this checklist stops one step before it.',
+      ticketRoute: 'Route: Publisher Account, Draft build, ' + (M ? 'macOS standalone installer' : 'Windows web and standalone installers') + '. Admit one game.',
       cloudSay: cloudSay, cloudPop: this.state.cloudPop,
       prepareCount: cp, uploadCount: cu, verifyCount: cv,
       doneCount: total, pct: Math.round(xp / XQ_TOTAL * 100), statusLine: status,
@@ -876,7 +940,7 @@ class Component extends DCLogic {
         self.persist(self.state.done, self.state.gameName, val, self.state.sound);
         self.runVerify(val, self.state.gameName, false);
       },
-      reset: function () { self.setState({ done: {}, gameName: '', receipt: '', verdict: null, toast: '', burst: '' }); self.persist({}, '', '', self.state.sound); }
+      reset: function () { self.setState({ done: {}, gameName: '', receipt: '', verdict: null, toast: '', burst: '' }); self.persist({}, '', '', self.state.sound, self.state.os); }
     };
   }
 }
