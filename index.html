@@ -129,7 +129,7 @@ html{scroll-behavior:smooth}
       <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
         <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="32" height="22" rx="3"/><path d="M18 40h12M24 32v8"/></svg>
         <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:600;font-size:20px;letter-spacing:-0.015em">Prepare</h3>
-        <p style="margin:0;color:#C8C8D0">Use a Mac for a macOS build, add the game in Publisher Account and grab Build Loader with the game's API key.</p>
+        <p style="margin:0;color:#C8C8D0">{{ prepareCard }}</p>
       </div>
       <div style="background:#15151D;border:1px solid #2A2A35;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px">
         <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#80EAFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 35a7 7 0 0 1-.8-13.9A10 10 0 0 1 31.500 19 7 7 0 0 1 33 35"/><path d="M24 42V27M18 32l6-6 6 6"/></svg>
@@ -404,6 +404,12 @@ html{scroll-behavior:smooth}
                   </div>
                 </sc-for>
               </div>
+              <sc-if value="{{ hasSkipAll }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;background:#0A0A0F;border:1px dashed #4A4A57;border-radius:12px;padding:14px 16px">
+                  <span style="font-size:13px;color:#C8C8D0">{{ skipAllNote }}</span>
+                  <div><button type="button" class="xq-btn" onClick="{{ skipAll }}" style="background:transparent;color:#F5A623;border:1.5px solid #F5A623;border-radius:999px;padding:8px 16px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:pointer">{{ skipAllLabel }}</button></div>
+                </div>
+              </sc-if>
               <sc-if value="{{ receiptOk }}" hint-placeholder-val="{{ false }}">
                 <div class="xq-pop" style="display:flex;gap:14px;align-items:flex-start;background:rgba(128,234,255,.08);border:1px solid #80EAFF;border-radius:16px;padding:16px 18px">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#80EAFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg>
@@ -671,6 +677,17 @@ class Component extends DCLogic {
     this.persist(this.state.done, this.state.gameName, this.state.receipt, s);
     if (s) this.chime('ok');
   }
+  skipAll() {
+    var ids = ['p3', 'u2', 'u3'], v = this.state.verdict;
+    var vm = { p3: !!(v && v.c1 && v.c2), u2: !!(v && v.run), u3: !!(v && v.all) };
+    var done = Object.assign({}, this.state.done);
+    var prev = this.doneMap(this.state.done, v);
+    var allMarked = ids.every(function (id) { return vm[id] || done[id]; });
+    ids.forEach(function (id) { if (vm[id]) return; if (allMarked) { delete done[id]; } else { done[id] = true; } });
+    this.setState({ done: done });
+    this.persist(done, this.state.gameName, this.state.receipt, this.state.sound);
+    this.celebrate(prev, this.doneMap(done, v), false);
+  }
   setOs(os) {
     if (os === this.state.os) return;
     this.setState({ os: os, dlMsg: '' });
@@ -822,7 +839,7 @@ class Component extends DCLogic {
         toggle: function () { self.toggleItem(id); }
       }, extra || {});
     }
-    function auto(id, title, body) {
+    function auto(id, title, body, extra) {
       var vm = { p3: !!(v && v.c1 && v.c2), u2: !!(v && v.run), u3: !!(v && v.all) };
       var ver = !!vm[id], skipped = !!manualDone[id] && !ver, ok = !!map[id];
       return Object.assign(base(id, title, body), {
@@ -832,7 +849,7 @@ class Component extends DCLogic {
         pillColor: ver ? '#80EAFF' : (skipped ? '#F5A623' : (v ? '#FF5C93' : '#9A9AA8')),
         canSkip: !ver, skipLabel: skipped ? 'Undo manual mark' : 'Receipt did not work? Mark as done manually',
         skip: function () { self.toggleItem(id); }
-      });
+      }, extra || {});
     }
     var register = [
       manual('r1', 'Sign up in Publisher Account', 'Open publisher.xsolla.com/signup and create an account. The password needs at least 8 characters with a digit, a capital and a lowercase letter. Every sign-in sends a confirmation code (two-factor authentication).', { hasLink: true, link: 'https://publisher.xsolla.com/', linkText: 'Open publisher.xsolla.com' }),
@@ -847,7 +864,7 @@ class Component extends DCLogic {
           : 'Build Loader creates a Windows build on a Windows PC, so your game folder must contain a .exe in its root. Free disk space of about 1.5 times the game size is needed.'),
       manual('p2', 'Add your game in Publisher Account', 'Open your project, then Launcher, Edit launcher, Games. If the game is already on the list, move on.'),
       auto('p3', M ? 'Download Build Loader for macOS and copy your API key' : 'Download Build Loader for Windows and copy your API key',
-        'Games, Set up next to your game, Builds, Game builds. Click BuildLoader.zip for ' + (M ? 'macOS (it unpacks to Mac/build_loader)' : 'Windows (it unpacks to Win\\build_loader.exe)') + ' and save it to Downloads, then copy the API key (launcher ID) with the plus icon. The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.')
+        'Games, Set up next to your game, Builds, Game builds. Download it with the button below or click BuildLoader.zip in Publisher Account for ' + (M ? 'macOS (it unpacks to Mac/build_loader)' : 'Windows (it unpacks to Win\\build_loader.exe)') + ' and keep the zip in Downloads without unzipping (the archive holds both OS tools, the app picks yours). Then copy the API key (launcher ID) with the plus icon. The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.', { hasLink: true, link: 'https://cdn.xsolla.net/launcher/build/Partners/build_loader.zip', linkText: M ? 'Download Build Loader for macOS (zip from Xsolla CDN)' : 'Download Build Loader for Windows (zip from Xsolla CDN)' })
     ];
     var upload = [
       manual('u1', M ? 'Get the upload app for Mac' : 'Get the upload app for Windows',
@@ -906,6 +923,11 @@ class Component extends DCLogic {
       register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
       demoText: dtext + (dtyping ? '\u258C' : ''), demoChecks: demoChecks, demoPill: demoOk ? 'Verified' : 'Printing...', demoPillBg: demoOk ? '#80EAFF' : '#F5A623',
       hasTicket: total === 12, ticketGame: (this.state.gameName || 'Your jam game'), ticketNo: tnum, ticketDate: tdate,
+      prepareCard: M ? 'Use a Mac with macOS 12.4 or newer, add the game in Publisher Account, get the macOS Build Loader and copy the game’s API key.' : 'Use a Windows 10 (64-bit) PC, add the game in Publisher Account, get the Windows Build Loader and copy the game’s API key.',
+      hasSkipAll: !(v && v.all),
+      skipAllNote: 'Receipt will not turn green? Maybe you uploaded another way or the app could not read the key. You can close the three receipt steps by hand and move on.',
+      skipAllLabel: (['p3', 'u2', 'u3'].every(function (id) { return map[id]; }) && !(v && v.all)) ? 'Undo: reopen steps 1.3, 2.2 and 2.3' : 'Mark steps 1.3, 2.2 and 2.3 as done manually',
+      skipAll: function () { self.skipAll(); },
       scenario: scenario, isMac: M, isWin: !M,
       macBg: M ? '#80EAFF' : 'transparent', macFg: M ? '#0A0A0F' : '#C8C8D0', winBg: !M ? '#80EAFF' : 'transparent', winFg: !M ? '#0A0A0F' : '#C8C8D0',
       setMac: function () { self.setOs('mac'); }, setWin: function () { self.setOs('win'); },

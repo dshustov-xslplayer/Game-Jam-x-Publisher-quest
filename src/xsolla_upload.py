@@ -360,6 +360,11 @@ def find_loader(arg, tooldir):
                    % ("Windows" if IS_WIN else "Mac"), 2)
     if os.path.isfile(arg):
         rmtree(tooldir); os.makedirs(tooldir); unzip(arg, tooldir); arg = tooldir
+        # the public archive (cdn.xsolla.net/.../build_loader.zip) holds build_loader_mac.zip and build_loader_win.zip inside
+        for f in sorted(os.listdir(tooldir)):
+            fl = f.lower()
+            if fl.endswith(".zip") and re.search(r"build.?loader", fl) and ("win" if IS_WIN else "mac") in fl:
+                unzip(os.path.join(tooldir, f), tooldir)
     for c in (os.path.join(arg, exe_rel), os.path.join(arg, os.path.basename(exe_rel))):
         if os.path.isfile(c): break
     else:

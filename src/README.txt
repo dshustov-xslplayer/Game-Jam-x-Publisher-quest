@@ -8,8 +8,10 @@ macOS:   double-click "Xsolla Upload.command"
 Windows: double-click "Xsolla Upload.bat"
 
 Needs Python 3.8+ (macOS offers to install it on first run; Windows: python.org).
-Before you start: download BuildLoader.zip for YOUR computer's OS from Publisher Account
-(Launcher > Edit launcher > Games > Set up > Builds > Game builds) into Downloads, and copy the API key.
+Before you start: put Build Loader into Downloads (no need to unzip it): either the public archive
+https://cdn.xsolla.net/launcher/build/Partners/build_loader.zip (holds the Mac and Windows tools)
+or BuildLoader.zip from Publisher Account (Launcher > Edit launcher > Games > Set up > Builds > Game builds).
+Then copy the API key of your game from the same page.
 
 When the upload finishes the app prints a receipt (also copied to the clipboard and saved on the
 Desktop as xsolla-quest-receipt.txt). Paste it into the quest page. It contains only a masked key.
