@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>XCA x Game Jam</title>
-<meta name="description" content="Register in Player Account, upload your jam build to the Xsolla Launcher and verify it with a receipt.">
+<meta name="description" content="Register in Player Account, upload your jam build to the Xsolla Player and verify it with a receipt.">
 <link rel="stylesheet" href="ds/xsolla/colors_and_type.css">
 <style>
 body{margin:0;background:#141d1f}
@@ -60,6 +60,11 @@ pre{margin:0}
 .xq-th.xq-lock::before{filter:grayscale(1) brightness(.5);opacity:.8}
 .xq-th.xq-lock::after{content:"";position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d3dcde' stroke-width='2.4'%3E%3Crect x='5' y='11' width='14' height='10' fill='%23141d1f'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/contain no-repeat}
 .xq-slot:hover .xq-th::before{transform:scale(1.1)}
+.xq-th.xq-ready::before{filter:saturate(.55) brightness(.8) drop-shadow(0 0 6px #80EAFF);animation:xq-ready 1.5s ease-in-out infinite}
+@keyframes xq-ready{0%,100%{transform:scale(1) rotate(0);filter:saturate(.55) brightness(.8) drop-shadow(0 0 4px #80EAFF)}25%{transform:scale(1.06) rotate(-2deg)}50%{transform:scale(1.1);filter:saturate(.9) brightness(1) drop-shadow(0 0 16px #80EAFF)}75%{transform:scale(1.06) rotate(2deg)}}
+.xq-slot{cursor:default}.xq-slot.xq-canopen{cursor:pointer}.xq-slot.xq-canopen:hover{background:#1c2a2d!important}
+.xq-ach{transition:transform .25s,background-color .25s,border-color .25s}.xq-ach:hover{transform:translateY(-4px);background:#2a3b3f!important}
+.xq-ach.xq-off{opacity:.55}.xq-ach.xq-off:hover{opacity:.85}
 .xq-cell{position:relative;height:356px}
 .xq-cell>.xq-card{position:absolute;left:0;right:0;top:0;height:100%;overflow:hidden;display:flex;flex-direction:column}
 .xq-cell>.xq-card>.xq-strip{flex:none;margin-top:auto}
@@ -111,6 +116,7 @@ html{scroll-behavior:smooth}
     <nav class="xq-nav-links xq-nav" style="display:flex;align-items:center;gap:28px;font-weight:500;font-size:15px">
       <a href="#how" style="color:#d3dcde;text-decoration:none">How it works</a>
       <a href="#quest" style="color:#d3dcde;text-decoration:none">Battle Path</a>
+      <a href="#achievements" style="color:#d3dcde;text-decoration:none">Achievements</a>
       <a href="#notes" style="color:#d3dcde;text-decoration:none">Good to know</a>
     </nav>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><button type="button" disabled aria-disabled="true" title="Xsolla ID accounts are coming soon" style="display:flex;align-items:center;gap:10px;background:#233134;color:#9fb0b3;border:1px solid #33454a;border-radius:0;padding:8px 14px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:not-allowed"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fb0b3" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>Xsolla ID<span style="font-size:10px;letter-spacing:.08em;background:#ffc380;color:#141d1f;padding:2px 6px">SOON</span></button><button type="button" disabled aria-disabled="true" title="Discord community is coming soon" style="display:flex;align-items:center;gap:10px;background:#5865F2;color:#FFFFFF;border:1px solid #5865F2;border-radius:0;padding:8px 14px;font:600 13px 'Aktiv Grotesk',system-ui,sans-serif;cursor:not-allowed"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1a15.8 15.8 0 0 0-4.8 0l-.5-1a17 17 0 0 0-4.2 1.3C2.7 9.3 2 13.2 2.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 10.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8A17 17 0 0 0 21.7 17c.4-4.4-.7-8.3-2.1-11.7ZM9.3 14.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm5.4 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>Discord<span style="font-size:10px;letter-spacing:.08em;background:#ffc380;color:#141d1f;padding:2px 6px">SOON</span></button><a class="xq-btn" href="#quest" style="background:#80EAFF;color:#141d1f;text-decoration:none;font-weight:600;font-size:14px;padding:12px 22px;border-radius:0">Start the Battle Path</a></div>
@@ -126,7 +132,7 @@ html{scroll-behavior:smooth}
   <section style="max-width:1200px;margin:0 auto;padding:28px 32px 24px;display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
     <div style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:24px">
       <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:none;color:#80EAFF">XCA x Game Jam</span>
-      <h1 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(36px,5.4vw,68px);line-height:1.04;letter-spacing:-0.03em;color:#FFFFFF;text-wrap:balance">Get your jam build into the Xsolla Launcher</h1>
+      <h1 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:clamp(36px,5.4vw,68px);line-height:1.04;letter-spacing:-0.03em;color:#FFFFFF;text-wrap:balance">Get your jam build into the Xsolla Player</h1>
       <p style="margin:0;font-size:19px;line-height:1.5;color:#d3dcde;max-width:520px">Twelve steps take your game from a zip archive to a Draft build that testers can install. Three of them are checked for real: a double-click upload app prints a receipt and this page verifies it.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a class="xq-btn" href="#quest" style="background:#80EAFF;color:#141d1f;text-decoration:none;font-weight:600;font-size:16px;padding:16px 28px;border-radius:0">Start the Battle Path</a>
@@ -232,35 +238,17 @@ html{scroll-behavior:smooth}
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:12px">
-            <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9fb0b3">Your items</span>
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9fb0b3">Your chests</span>
             <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
-
-              <div class="{{ slotRClass }} xq-slot" style="border:1px solid {{ slotRBorder }};background:#141d1f;border-radius:0;padding:0 0 10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
-                <sc-if value="{{ doneR }}" hint-placeholder-val="{{ false }}"><div class="xq-th xq-ch0" aria-hidden="true"></div></sc-if>
-                <sc-if value="{{ notDoneR }}" hint-placeholder-val="{{ true }}"><div class="xq-th xq-lock xq-ch0" aria-hidden="true"></div></sc-if>
-                <span style="font-size:12px;line-height:1.25;color:#d3dcde">Player Account</span>
-              </div>
-
-              <div class="{{ slotAClass }} xq-slot" style="border:1px solid {{ slotABorder }};background:#141d1f;border-radius:0;padding:0 0 10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
-                <sc-if value="{{ doneA }}" hint-placeholder-val="{{ false }}"><div class="xq-th xq-ch1" aria-hidden="true"></div></sc-if>
-                <sc-if value="{{ notDoneA }}" hint-placeholder-val="{{ true }}"><div class="xq-th xq-lock xq-ch1" aria-hidden="true"></div></sc-if>
-                <span style="font-size:12px;line-height:1.25;color:#d3dcde">Launcher Key</span>
-              </div>
-
-              <div class="{{ slotBClass }} xq-slot" style="border:1px solid {{ slotBBorder }};background:#141d1f;border-radius:0;padding:0 0 10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
-                <sc-if value="{{ doneB }}" hint-placeholder-val="{{ false }}"><div class="xq-th xq-ch2" aria-hidden="true"></div></sc-if>
-                <sc-if value="{{ notDoneB }}" hint-placeholder-val="{{ true }}"><div class="xq-th xq-lock xq-ch2" aria-hidden="true"></div></sc-if>
-                <span style="font-size:12px;line-height:1.25;color:#d3dcde">Draft Build</span>
-              </div>
-
-              <div class="{{ slotCClass }} xq-slot" style="border:1px solid {{ slotCBorder }};background:#141d1f;border-radius:0;padding:0 0 10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
-                <sc-if value="{{ doneC }}" hint-placeholder-val="{{ false }}"><div class="xq-th xq-ch3" aria-hidden="true"></div></sc-if>
-                <sc-if value="{{ notDoneC }}" hint-placeholder-val="{{ true }}"><div class="xq-th xq-lock xq-ch3" aria-hidden="true"></div></sc-if>
-                <span style="font-size:12px;line-height:1.25;color:#d3dcde">Installer-Ready</span>
-              </div>
-
+              <sc-for list="{{ chests }}" as="ch" hint-placeholder-count="4">
+              <button type="button" class="xq-slot {{ ch.cls }}" onClick="{{ ch.open }}" aria-label="{{ ch.label }}" style="border:1px solid {{ ch.border }};background:#141d1f;color:inherit;font:inherit;border-radius:0;padding:0 0 10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                <div class="xq-th {{ ch.thCls }} {{ ch.img }}" aria-hidden="true"></div>
+                <span style="font-size:12px;line-height:1.25;color:#d3dcde">{{ ch.name }}</span>
+                <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:{{ ch.subColor }}">{{ ch.sub }}</span>
+              </button>
+              </sc-for>
             </div>
-            <p style="margin:0;font-size:13px;color:#9fb0b3">Items are collectible and cannot be transferred.</p>
+            <p style="margin:0;font-size:13px;color:#9fb0b3">Finish a stage to unlock its chest, then open it to earn an achievement.</p>
           </div>
           <div style="background:#233134;border-left:4px solid #546a6f;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9fb0b3">Xsolla ID account</span><span style="font-size:10px;font-weight:600;letter-spacing:.08em;background:#ffc380;color:#141d1f;padding:2px 6px">SOON</span></div>
@@ -559,6 +547,28 @@ html{scroll-behavior:smooth}
   </section>
 
   <!-- GOOD TO KNOW -->
+  <section id="achievements" style="max-width:1200px;margin:0 auto;padding:72px 32px 24px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-left:6px solid #ffc380;padding:14px 20px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 14px,transparent 14px 28px),#233134">
+      <span style="font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:22px;color:#ffc380">AC</span>
+      <h2 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:24px">Achievements</h2>
+      <span style="margin-left:auto;font-size:13px;font-weight:600;padding:3px 10px;background:#141d1f;color:#d3dcde">{{ achCount }} of {{ achTotal }} unlocked</span>
+    </div>
+    <p style="margin:0;max-width:720px;color:#9fb0b3;font-size:15px">Chests hold rewards for finished stages. Open a chest to earn its achievement. A few achievements are not in any chest: you earn them by doing something special.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px;align-items:stretch">
+      <sc-for list="{{ achievements }}" as="ac" hint-placeholder-count="7">
+        <div class="xq-ach {{ ac.cls }}" style="background:#233134;border-top:4px solid {{ ac.color }};padding:18px 16px;display:flex;flex-direction:column;gap:10px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:{{ ac.color }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{ ac.ink }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 8px;background:{{ ac.tagBg }};color:#141d1f">{{ ac.tag }}</span>
+          </div>
+          <h3 style="margin:0;font-family:'Pilat Wide',system-ui,sans-serif;font-weight:700;font-size:17px;line-height:1.25;color:#FFFFFF">{{ ac.name }}</h3>
+          <p style="margin:0;color:#d3dcde;font-size:14px">{{ ac.desc }}</p>
+          <span style="margin-top:auto;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9fb0b3">{{ ac.source }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
   <section id="notes" style="max-width:1200px;margin:0 auto;padding:80px 32px;display:flex;flex-direction:column;gap:32px">
     <div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
       <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#80EAFF">Good to know</span>
@@ -686,10 +696,10 @@ var DL_B64 = '';
 var XQ_SALT = 'xsolla-launch-quest-v1';
 var XQ_ITEMS = { r1: 50, r2: 50, r3: 100, p1: 50, p2: 50, p3: 150, u1: 50, u2: 150, u3: 200, v1: 100, v2: 100, v3: 50 };
 var XQ_STAGES = [
-  { k: 'R', ids: ['r1', 'r2', 'r3'], name: 'Player Account' },
-  { k: 'A', ids: ['p1', 'p2', 'p3'], name: 'Launcher Key' },
-  { k: 'B', ids: ['u1', 'u2', 'u3'], name: 'Draft Build' },
-  { k: 'C', ids: ['v1', 'v2', 'v3'], name: 'Installer-Ready' }
+  { k: 'R', ids: ['r1', 'r2', 'r3'], name: 'Player Account', ach: 'First Steps', cls: 'xq-ch0' },
+  { k: 'A', ids: ['p1', 'p2', 'p3'], name: 'Launcher Key', ach: 'Key Keeper', cls: 'xq-ch1' },
+  { k: 'B', ids: ['u1', 'u2', 'u3'], name: 'Draft Build', ach: 'Draft Dropper', cls: 'xq-ch2' },
+  { k: 'C', ids: ['v1', 'v2', 'v3'], name: 'Installer-Ready', ach: 'Launch Ready', cls: 'xq-ch3' }
 ];
 var XQ_TOTAL = 1100;
 function guessOs() { try { return /win/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '') ? 'win' : 'mac'; } catch (e) { return 'mac'; } }
@@ -700,7 +710,7 @@ class Component extends DCLogic {
   constructor(props) {
     super(props);
     this.state = { done: {}, gameName: '', receipt: '', verdict: null, dlMsg: '', sound: true,
-      recent: {}, recentStages: {}, toast: '', toastId: 0, burst: '', burstId: 0, xpPop: '', demoN: 0, cloudPop: '', copied: '', os: guessOs() };
+      recent: {}, recentStages: {}, toast: '', toastId: 0, burst: '', burstId: 0, xpPop: '', demoN: 0, cloudPop: '', copied: '', opened: {}, os: guessOs() };
   }
   componentDidMount() {
     var self = this;
@@ -714,14 +724,15 @@ class Component extends DCLogic {
       if (raw) {
         var s = JSON.parse(raw);
         var os0 = (s.os === 'win' || s.os === 'mac') ? s.os : this.state.os;
-        this.setState({ done: s.done || {}, gameName: s.gameName || '', receipt: s.receipt || '', sound: s.sound !== false, os: os0 });
+        this.setState({ done: s.done || {}, gameName: s.gameName || '', receipt: s.receipt || '', sound: s.sound !== false, os: os0, opened: s.opened || {} });
         if (s.receipt) this.runVerify(s.receipt, s.gameName || '', true);
       }
     } catch (e) {}
   }
-  persist(done, gameName, receipt, sound, os) {
+  persist(done, gameName, receipt, sound, os, opened) {
     if (os === undefined) os = this.state.os;
-    try { localStorage.setItem('xq-landing-v2', JSON.stringify({ done: done, gameName: gameName, receipt: receipt, sound: sound, os: os })); } catch (e) {}
+    if (opened === undefined) opened = this.state.opened;
+    try { localStorage.setItem('xq-landing-v2', JSON.stringify({ done: done, gameName: gameName, receipt: receipt, sound: sound, os: os, opened: opened })); } catch (e) {}
   }
   doneMap(manual, v) {
     return {
@@ -740,6 +751,29 @@ class Component extends DCLogic {
     this.setState({ done: done });
     this.persist(done, this.state.gameName, this.state.receipt, this.state.sound);
     this.celebrate(prev, this.doneMap(done, this.state.verdict), false);
+  }
+  markDownloaded(id) {
+    if (this.state.done[id]) return;
+    var done = Object.assign({}, this.state.done);
+    var prev = this.doneMap(this.state.done, this.state.verdict);
+    done[id] = true;
+    this.setState({ done: done });
+    this.persist(done, this.state.gameName, this.state.receipt, this.state.sound);
+    this.celebrate(prev, this.doneMap(done, this.state.verdict), false);
+  }
+  openChest(k) {
+    var self = this, st = XQ_STAGES.filter(function (x) { return x.k === k; })[0];
+    if (!st || this.state.opened[k]) return;
+    var map = this.doneMap(this.state.done, this.state.verdict);
+    if (!st.ids.every(function (id) { return map[id]; })) return;
+    var opened = Object.assign({}, this.state.opened); opened[k] = true;
+    var tid = this.state.toastId + 1, bid = this.state.burstId + 1, rs = {}; rs[k] = true;
+    this.setState({ opened: opened, recentStages: rs, toast: 'Chest opened. Achievement unlocked: ' + st.ach, toastId: tid, burst: '', burstId: bid });
+    this.persist(this.state.done, this.state.gameName, this.state.receipt, this.state.sound, this.state.os, opened);
+    setTimeout(function () { if (self.state.burstId === bid) self.setState({ burst: 'big' }); }, 40);
+    setTimeout(function () { if (self.state.burstId === bid) self.setState({ burst: '', recentStages: {} }); }, 2400);
+    setTimeout(function () { if (self.state.toastId === tid) self.setState({ toast: '' }); }, 5000);
+    this.chime('big');
   }
   toggleSound() {
     var s = !this.state.sound;
@@ -785,7 +819,7 @@ class Component extends DCLogic {
     var finale = Object.keys(XQ_ITEMS).every(function (id) { return next[id]; });
     var msg = '', burst = '', chime = 'ok';
     if (finale) { msg = 'All twelve steps done. Your Launch Ticket dropped: successful launch with Xsolla. +' + gained + ' XP'; burst = 'big'; chime = 'big'; }
-    else if (last) { msg = 'Stage complete. Item unlocked: ' + last.name + '. +' + gained + ' XP'; burst = 'big'; chime = 'stage'; }
+    else if (last) { msg = 'Stage complete. Chest ready to open: ' + last.name + '. +' + gained + ' XP'; burst = 'big'; chime = 'stage'; }
     else if (ra !== rb) { msg = 'Rank up: ' + ra + '. +' + gained + ' XP'; burst = 'small'; chime = 'stage'; }
     else if (fromReceipt) { msg = 'Verified by your receipt. +' + gained + ' XP'; burst = 'small'; }
     var tid = this.state.toastId + 1, bid = this.state.burstId + 1;
@@ -895,6 +929,7 @@ class Component extends DCLogic {
     try { navigator.clipboard.writeText(text).then(ok, fallback); } catch (e) { fallback(); }
   }
   download() {
+    this.markDownloaded('u1');
     this.setState({ dlMsg: this.state.os === 'win'
       ? 'Unzip it, then double-click Xsolla Upload.bat. If SmartScreen appears: More info, then Run anyway.'
       : 'Unzip it, then double-click Xsolla Upload.command. If macOS blocks it: System Settings, Privacy & Security, Open Anyway.' });
@@ -917,6 +952,11 @@ class Component extends DCLogic {
         label: (d ? 'Mark as not done: ' : 'Mark as done: ') + title,
         toggle: function () { self.toggleItem(id); }
       }, extra || {});
+    }
+    function dlGate(it) {
+      var d = !!it.done;
+      return Object.assign(it, { isManual: false, isAuto: true, autoBorder: d ? '#80EAFF' : '#546a6f', autoBg: d ? '#80EAFF' : 'transparent',
+        pill: d ? 'Downloaded' : 'Click Download', pillColor: d ? '#80EAFF' : '#9fb0b3', canSkip: false, skipLabel: '', skip: function () {} });
     }
     function auto(id, title, body, extra) {
       var vm = { p3: !!(v && v.c1 && v.c2), u2: !!(v && v.run), u3: !!(v && v.all) };
@@ -946,14 +986,14 @@ class Component extends DCLogic {
         'Games, Set up next to your game, Builds, Game builds. Download it with the button below or click BuildLoader.zip in Player Account for ' + (M ? 'macOS (it unpacks to Mac/build_loader)' : 'Windows (it unpacks to Win\\build_loader.exe)') + ' and keep the zip in Downloads without unzipping (the archive holds both OS tools, the app picks yours). Then copy the API key (launcher ID) with the plus icon. The receipt proves both: Build Loader must carry Xsolla’s signature and Xsolla must accept your key.', { hasLink: true, link: 'https://cdn.xsolla.net/launcher/build/Partners/build_loader.zip', linkText: M ? 'Download Build Loader for macOS (zip from Xsolla CDN)' : 'Download Build Loader for Windows (zip from Xsolla CDN)' })
     ];
     var upload = [
-      manual('u1', M ? 'Get the upload app for Mac' : 'Get the upload app for Windows',
+      dlGate(manual('u1', M ? 'Get the upload app for Mac' : 'Get the upload app for Windows',
         M ? 'Save xsolla-upload.zip, unzip it and double-click Xsolla Upload.command. It needs Python 3 (macOS offers to install it on the first run). If macOS says it could not verify the file, that is expected: the app is not notarized by Apple. Open System Settings, Privacy & Security, scroll down and click Open Anyway, or use the Terminal command below.'
           : 'Save xsolla-upload.zip, unzip it and double-click Xsolla Upload.bat. It needs Python 3 from python.org (tick Add python.exe to PATH). If Windows SmartScreen appears, click More info, then Run anyway, or use the PowerShell command below.', {
         hasCmd: true,
         cmdTitle: M ? 'Mac, optional: download, unlock and start in one command (Terminal)' : 'Windows, optional: download and start in one command (PowerShell)',
         cmd: M ? 'cd ~/Downloads && curl -fsSLO ' + ZIP + ' && unzip -oq xsolla-upload.zip && xattr -dr com.apple.quarantine xsolla-upload && open "xsolla-upload/Xsolla Upload.command"'
                : 'cd $env:USERPROFILE\\Downloads; Invoke-WebRequest ' + ZIP + ' -OutFile xsolla-upload.zip; Expand-Archive xsolla-upload.zip -DestinationPath . -Force; & ".\\xsolla-upload\\Xsolla Upload.bat"',
-        isDl: true, dlMsg: this.state.dlMsg, download: function () { self.download(); } }),
+        isDl: true, dlMsg: this.state.dlMsg, download: function () { self.download(); } })),
       auto('u2', 'Run the app and upload your game',
         M ? 'The app asks for your game (drag the .app or its .zip into the window), the game name and your API key at a hidden prompt. Press Enter at each question you do not need. It checks the build, asks to confirm, then uploads to Draft.'
           : 'The app asks for your game (drag the game folder or its .zip into the window), the game name and your API key at a hidden prompt. Keep the game path in Latin letters and shorter than 260 characters, for example C:\\Games\\MyGame. The app checks the build, asks to confirm, then uploads to Draft.'),
@@ -980,7 +1020,7 @@ class Component extends DCLogic {
       var failed = it.isAuto && it.pill === 'Check failed', manualMark = it.isAuto && it.pill === 'Marked manually';
       it.num = (i < 9 ? '0' : '') + (i + 1);
       it.stripe = it.done ? '#95ff80' : (failed ? '#e84f30' : '#ffc380');
-      it.tag = it.done ? (manualMark ? 'MANUAL' : 'DONE') : (failed ? 'FAILED' : (it.isAuto ? 'AUTO CHECK' : 'TO DO'));
+      it.tag = it.done ? (manualMark ? 'MANUAL' : 'DONE') : (failed ? 'FAILED' : (it.id === 'u1' ? 'DOWNLOAD' : (it.isAuto ? 'AUTO CHECK' : 'TO DO')));
       it.tagBg = it.done ? '#95ff80' : (failed ? '#e84f30' : (it.isAuto ? '#80EAFF' : '#ffc380'));
       it.linkIsDl = !!(it.hasLink && /\.zip$/i.test(it.link || ''));
       it.linkIsExt = !!(it.hasLink && !it.linkIsDl);
@@ -1010,6 +1050,22 @@ class Component extends DCLogic {
     var allItems = register.concat(prepare, upload, verify), nxt = null;
     for (var q = 0; q < allItems.length; q++) { if (!allItems[q].done) { nxt = allItems[q]; break; } }
     var cloudSay = this.state.toast || (nxt ? 'Next: ' + nxt.title : 'Launch Ticket is yours! Next: Generate installer.');
+    var achList = (function () {
+        var op = self.state.opened, all12 = total === 12 && XQ_STAGES.every(function (x) { return op[x.k]; });
+        var list = [
+          { name: 'First Steps', desc: 'Your Player Account is ready and your first project exists.', done: !!op.R, source: 'From chest: Player Account' },
+          { name: 'Key Keeper', desc: 'The Build Loader is in your Downloads and your API key is saved.', done: !!op.A, source: 'From chest: Launcher Key' },
+          { name: 'Draft Dropper', desc: 'Your game reached the Draft stage through the upload app.', done: !!op.B, source: 'From chest: Draft Build' },
+          { name: 'Launch Ready', desc: 'The start file is set and the build waits for testers.', done: !!op.C, source: 'From chest: Installer-Ready' },
+          { name: 'Clean Run', desc: 'Every receipt check passed on its own, with no manual marks.', done: !!(v && v.all), source: 'Special: pass all receipt checks' },
+          { name: 'Release Master', desc: 'You collected 800 XP or more on the Battle Path.', done: xp >= 800, source: 'Special: reach 800 XP' },
+          { name: 'Completionist', desc: 'All twelve steps done and all four chests opened.', done: all12, source: 'Special: finish everything' }
+        ];
+        return list.map(function (a) {
+          return Object.assign(a, { cls: a.done ? '' : 'xq-off', color: a.done ? '#ffc380' : '#33454a', ink: a.done ? '#141d1f' : '#9fb0b3',
+            tag: a.done ? 'UNLOCKED' : 'LOCKED', tagBg: a.done ? '#95ff80' : '#546a6f' });
+        });
+      })();
     return {
       register: register, registerCount: cr, prepare: prepare, upload: upload, verify: verify, checks: checks,
       demoText: dtext + (dtyping ? '\u258C' : ''), demoChecks: demoChecks, demoPill: demoOk ? 'Verified' : 'Printing...', demoPillBg: demoOk ? '#80EAFF' : '#ffc380',
@@ -1030,6 +1086,19 @@ class Component extends DCLogic {
       prepareCount: cp, uploadCount: cu, verifyCount: cv,
       doneCount: total, pct: Math.round(xp / XQ_TOTAL * 100), statusLine: status,
       xp: xp, xpMax: XQ_TOTAL, rankName: this.rankOf(xp), xpPop: this.state.xpPop, hasXpPop: !!this.state.xpPop,
+      chests: XQ_STAGES.map(function (st) {
+        var dn = st.ids.every(function (id) { return map[id]; }), op = !!self.state.opened[st.k];
+        var state = op ? 'opened' : (dn ? 'ready' : 'locked');
+        return { name: st.name, img: st.cls, cls: (state === 'ready' ? 'xq-canopen ' : '') + (recentStages[st.k] ? 'xq-glow' : ''),
+          thCls: state === 'locked' ? 'xq-lock' : (state === 'ready' ? 'xq-ready' : ''),
+          border: state === 'opened' ? '#80EAFF' : (state === 'ready' ? '#ffc380' : '#33454a'),
+          sub: state === 'opened' ? st.ach : (state === 'ready' ? 'Tap to open' : 'Locked'),
+          subColor: state === 'opened' ? '#80EAFF' : (state === 'ready' ? '#ffc380' : '#546a6f'),
+          label: state === 'ready' ? 'Open chest: ' + st.name : (state === 'opened' ? 'Opened chest: ' + st.name + ', achievement ' + st.ach : 'Locked chest: ' + st.name),
+          open: function () { self.openChest(st.k); } };
+      }),
+      achievements: achList,
+      achCount: achList.filter(function (x) { return x.done; }).length, achTotal: achList.length,
       doneR: doneR, notDoneR: !doneR, slotRBorder: doneR ? '#80EAFF' : '#33454a', slotRClass: recentStages.R ? 'xq-glow' : '',
       doneA: doneA, doneB: doneB, doneC: doneC,
       notDoneA: !doneA, notDoneB: !doneB, notDoneC: !doneC,
@@ -1054,7 +1123,7 @@ class Component extends DCLogic {
         self.persist(self.state.done, self.state.gameName, val, self.state.sound);
         self.runVerify(val, self.state.gameName, false);
       },
-      reset: function () { self.setState({ done: {}, gameName: '', receipt: '', verdict: null, toast: '', burst: '' }); self.persist({}, '', '', self.state.sound, self.state.os); }
+      reset: function () { self.setState({ done: {}, gameName: '', receipt: '', verdict: null, toast: '', burst: '', opened: {} }); self.persist({}, '', '', self.state.sound, self.state.os, {}); }
     };
   }
 }
