@@ -138,10 +138,10 @@ html{scroll-behavior:smooth}
         <span style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9fb0b3">Example receipt</span>
         <span style="font-size:12px;font-weight:600;color:#141d1f;background:{{ demoPillBg }};border-radius:0;padding:4px 12px;transition:background .3s">{{ demoPill }}</span>
       </div>
-      <div style="overflow-x:auto;background:#141d1f;border:1px solid #33454a;border-radius:0;padding:16px">
-        <pre style="font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:13px;line-height:1.7;color:#d3dcde;min-height:196px;white-space:pre-wrap">{{ demoText }}</pre>
+      <div style="height:200px;box-sizing:border-box;overflow:auto;background:#141d1f;border:1px solid #33454a;border-radius:0;padding:16px">
+        <pre style="margin:0;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:13px;line-height:1.7;color:#d3dcde;white-space:pre-wrap">{{ demoText }}</pre>
       </div>
-      <div style="display:flex;flex-direction:column;gap:6px" aria-label="Example checks">
+      <div style="display:flex;flex-direction:column;gap:5px;height:236px;overflow:hidden" aria-label="Example checks">
         <sc-for list="{{ demoChecks }}" as="dc" hint-placeholder-count="7">
           <div style="display:flex;align-items:center;gap:10px;font-size:13px">
             <span style="flex:none;min-width:70px;text-align:center;font-size:11px;font-weight:600;border-radius:0;padding:2px 8px;border:1px solid {{ dc.color }};color:{{ dc.color }}">{{ dc.pill }}</span>
@@ -149,7 +149,7 @@ html{scroll-behavior:smooth}
           </div>
         </sc-for>
       </div>
-      <p style="margin:0;font-size:14px;color:#9fb0b3">Live example: the upload app sends your game to the Draft stage and prints this receipt, then each check turns green. Paste your own receipt into the page below. Players never see a Draft build.</p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#9fb0b3;height:40px;overflow:hidden">Live example: the upload app prints this receipt and each check turns green. Paste your own receipt below.</p>
     </div>
   </section>
 
