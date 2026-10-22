@@ -51,6 +51,9 @@ pre{margin:0}
 .xq-chest.xq-canopen{cursor:pointer}
 .xq-chest.xq-canopen .xq-cimg::before{animation:xq-hready 1.4s ease-in-out infinite}
 @keyframes xq-hready{0%,100%{filter:drop-shadow(0 0 14px var(--glow))}50%{filter:drop-shadow(0 0 46px var(--glow)) brightness(1.15)}}
+.xq-chest.xq-opened .xq-cimg{animation:none}
+.xq-chest.xq-opened .xq-cimg::before,.xq-chest.xq-opened:hover .xq-cimg::before{filter:none;transform:none}
+.xq-chest.xq-opened .xq-cap{border-left-color:#546a6f}
 .xq-mini{width:64px!important;height:64px!important;flex:none;padding:0;background:#141d1f;border:1px solid #33454a;display:block;cursor:default}
 .xq-mini::before{inset:4px}
 button.xq-mini.xq-canopen{cursor:pointer;border-color:#ffc380}
@@ -1100,7 +1103,7 @@ class Component extends DCLogic {
         var dn = st.ids.every(function (id) { return map[id]; }), op = !!self.state.opened[st.k];
         var state = op ? 'opened' : (dn ? 'ready' : 'locked');
         return { name: st.name, img: st.cls, hc: st.cls.replace('ch', 'hc'), lv: 'LV 0' + (XQ_STAGES.indexOf(st) + 1), isChest: state !== 'opened', isTrophy: state === 'opened',
-          heroCls: (state === 'ready' ? 'xq-canopen ' : '') + (recentStages[st.k] ? 'xq-glow' : ''),
+          heroCls: (state === 'ready' ? 'xq-canopen ' : '') + (state === 'opened' ? 'xq-opened ' : '') + (recentStages[st.k] ? 'xq-glow' : ''),
           cls: (state === 'ready' ? 'xq-canopen ' : '') + (recentStages[st.k] ? 'xq-glow' : ''),
           thCls: state === 'locked' ? 'xq-lock' : (state === 'ready' ? 'xq-ready' : ''),
           border: state === 'opened' ? '#80EAFF' : (state === 'ready' ? '#ffc380' : '#33454a'),
