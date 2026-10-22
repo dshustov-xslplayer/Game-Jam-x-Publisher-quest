@@ -51,17 +51,16 @@ pre{margin:0}
 .xq-chest.xq-canopen{cursor:pointer}
 .xq-chest.xq-canopen .xq-cimg::before{animation:xq-hready 1.4s ease-in-out infinite}
 @keyframes xq-hready{0%,100%{filter:drop-shadow(0 0 14px var(--glow))}50%{filter:drop-shadow(0 0 46px var(--glow)) brightness(1.15)}}
-.xq-chest.xq-opened .xq-cimg{animation:none}
-.xq-chest.xq-opened .xq-cimg::before,.xq-chest.xq-opened:hover .xq-cimg::before{filter:none;transform:none}
-.xq-chest.xq-opened .xq-cap{border-left-color:#546a6f}
+.xq-chest.xq-canopen .xq-cap{border-left-color:var(--glow)}
 .xq-mini{width:64px!important;height:64px!important;flex:none;padding:0;background:#141d1f;border:1px solid #33454a;display:block;cursor:default}
 .xq-mini::before{inset:4px}
 button.xq-mini.xq-canopen{cursor:pointer;border-color:#ffc380}
-.xq-cimg{position:relative;width:min(100%,195px);aspect-ratio:var(--ar);animation:xq-float 5s ease-in-out infinite}
+.xq-cimg{position:relative;width:min(100%,195px);aspect-ratio:var(--ar)}
+.xq-chest.xq-canopen .xq-cimg{animation:xq-float 3.2s ease-in-out infinite}
 .xq-chest:nth-child(2) .xq-cimg{animation-delay:-1.2s}.xq-chest:nth-child(3) .xq-cimg{animation-delay:-2.4s}.xq-chest:nth-child(4) .xq-cimg{animation-delay:-3.6s}
-.xq-cimg::before{content:"";position:absolute;inset:0;background:var(--img) center/contain no-repeat;filter:drop-shadow(0 0 20px var(--glow));transition:filter .35s,transform .35s}
-.xq-chest:hover .xq-cimg::before{transform:translateY(-8px) scale(1.05);filter:drop-shadow(0 0 34px var(--glow))}
-.xq-cap{align-self:stretch;border-left:4px solid var(--glow);padding:6px 12px;background:rgba(35,49,52,.85);transition:background .25s,padding-left .25s}
+.xq-cimg::before{content:"";position:absolute;inset:0;background:var(--img) center/contain no-repeat;filter:none;transition:filter .35s,transform .35s}
+.xq-chest.xq-canopen:hover .xq-cimg::before{transform:scale(1.05)}
+.xq-cap{align-self:stretch;border-left:4px solid #546a6f;padding:6px 12px;background:rgba(35,49,52,.85);transition:background .25s,padding-left .25s}
 .xq-chest:hover .xq-cap{padding-left:18px}
 @keyframes xq-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .xq-th{width:100%;height:84px;position:relative}
